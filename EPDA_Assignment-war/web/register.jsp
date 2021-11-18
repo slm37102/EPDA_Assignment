@@ -54,12 +54,12 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>Phone number:</td>
-                    <td><input type="tel" name="phone" size="20" required></td>
-                </tr>
-                <tr>
                     <td>IC no.:</td>
                     <td><input type="text" name="ic" size="20" required></td>
+                </tr>
+                <tr>
+                    <td>Phone number:</td>
+                    <td><input type="tel" name="phone" size="20" required></td>
                 </tr>
                 <tr>
                     <td>Email Address:</td>

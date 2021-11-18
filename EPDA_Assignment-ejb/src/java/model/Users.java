@@ -16,13 +16,13 @@ import javax.persistence.Id;
  * @author SLM
  */
 @Entity
-public class User implements Serializable {
+public class Users implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-// userType
+    // userType
     // Ministry = 0, Clinic = 1, Public User = 2
     private int userType;
     private String username;
@@ -33,7 +33,7 @@ public class User implements Serializable {
     private String ic;
     private String email;
 
-    public User(int userType, String username, String password, String name, String gender, String phone, String ic, String email) {
+    public Users(int userType, String username, String password, String name, String gender, String phone, String ic, String email) {
         this.userType = userType;
         this.username = username;
         this.password = password;
@@ -44,7 +44,7 @@ public class User implements Serializable {
         this.email = email;
     }
 
-    public User(int userType, String username, String password, String name, String phone, String email) {
+    public Users(int userType, String username, String password, String name, String phone, String email) {
         this.userType = userType;
         this.username = username;
         this.password = password;
@@ -52,10 +52,10 @@ public class User implements Serializable {
         this.phone = phone;
         this.email = email;
     }
-
-    public User() {
-    }
     
+    public Users() {
+    }
+
     public Long getId() {
         return id;
     }
@@ -127,7 +127,7 @@ public class User implements Serializable {
     public void setEmail(String email) {
         this.email = email;
     }
-
+    
     @Override
     public int hashCode() {
         int hash = 0;
@@ -138,10 +138,10 @@ public class User implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof User)) {
+        if (!(object instanceof Users)) {
             return false;
         }
-        User other = (User) object;
+        Users other = (Users) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -150,7 +150,7 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-        return "model.User[ id=" + id + " ]";
+        return "model.Users[ id=" + id + " ]";
     }
     
 }

@@ -14,6 +14,6 @@
     <body>
         <a href="clinicHome.jsp">Home</a> | 
         <a href="editProfile.jsp">Edit Profile</a> | 
-        <a href="login.jsp">Logout</a>
+        <a href="Logout">Logout</a>
     </body>
 </html>

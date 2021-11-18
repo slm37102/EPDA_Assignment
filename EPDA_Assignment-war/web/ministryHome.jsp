@@ -13,7 +13,9 @@
     </head>
     <body>
         <a href="ministryHome.jsp">Home</a> | 
-        <a href="editProfile.jsp">Edit Profile</a> | 
-        <a href="login.jsp">Logout</a>
+        <a href="">Edit Ministry</a> | 
+        <a href="">Edit Clinic</a> | 
+        <a href="">Edit Public User</a> | 
+        <a href="Logout">Logout</a>
     </body>
 </html>

@@ -13,6 +13,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import model.Users;
 import model.UsersFacade;
 
@@ -20,12 +21,11 @@ import model.UsersFacade;
  *
  * @author SLM
  */
-@WebServlet(name = "Register", urlPatterns = {"/Register"})
-public class Register extends HttpServlet {
+@WebServlet(name = "EditProfile", urlPatterns = {"/EditProfile"})
+public class EditProfile extends HttpServlet {
 
     @EJB
     private UsersFacade usersFacade;
-    
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,6 +39,8 @@ public class Register extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        HttpSession s = request.getSession(false);
+        Users user = (Users)s.getAttribute("login");
         
         String userType = request.getParameter("userType");
         String username = request.getParameter("username");
@@ -47,25 +49,41 @@ public class Register extends HttpServlet {
         String phone = request.getParameter("phone");
         String email = request.getParameter("email");
         
-        Users user = null;
         
-        if (userType.equals("Public User")) {
-            // for public user
+        if (user.getUserType() != 1) {
+            // for ministry and public user
             String gender = request.getParameter("gender");
             String ic = request.getParameter("ic");
-            
-            user = new Users(2, username, password, name, gender, ic, phone, email);
-            
-        } else if (userType.equals("Clinic")) {
-            // for clinic        
-            user = new Users(1, username, password, name, phone, email);
+            user.setUsername(username);
+            user.setPassword(password);
+            user.setName(name);
+            user.setGender(gender);
+            user.setIc(ic);
+            user.setPhone(phone);
+            user.setEmail(email);
+        } else {
+            // for clinic
+            user.setUsername(username);
+            user.setPassword(password);
+            user.setName(name);
+            user.setPhone(phone);
+            user.setEmail(email);
         }
         
-        usersFacade.create(user);
+        usersFacade.edit(user);
+        
         try (PrintWriter out = response.getWriter()) {
-            request.getRequestDispatcher("login.jsp").include(request, response);
-            out.println("<br><br>Thank you "+name+", registration is done!");
-            
+            switch (user.getUserType()) {
+                case 0:
+                    request.getRequestDispatcher("ministryHome.jsp").include(request, response);
+                    break;
+                case 1:
+                    request.getRequestDispatcher("clinicHome.jsp").include(request, response);
+                    break;
+                case 2:
+                    request.getRequestDispatcher("publicUserHome.jsp").include(request, response);
+                    break;
+            }
         }
     }
 

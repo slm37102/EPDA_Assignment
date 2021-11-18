@@ -15,8 +15,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import model.User;
-import model.UserFacade;
+import model.Users;
+import model.UsersFacade;
 
 /**
  *
@@ -26,7 +26,7 @@ import model.UserFacade;
 public class Login extends HttpServlet {
 
     @EJB
-    private UserFacade userFacade;
+    private UsersFacade userFacade;
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -46,15 +46,24 @@ public class Login extends HttpServlet {
         
         // search for user 
         // can change to other popega method 
-        
-        List<User> userList = userFacade.findAll();
-        User user = null;        
+        Users user = null;
+        List<Users> userList = userFacade.findAll();
         for (int i = 0; i < userList.size(); i++) {
             if (userList.get(i).getUsername().equals(username)) {
                 user = userList.get(i);
                 break;
             }
-        }    
+        }
+        if (username.equals("admin") && password.equals("admin")) {
+            //if no admin in table add admin
+            if (user == null) {
+                user = new Users(0, "admin", "admin", "-", "-", "-", "-", "-");
+                userFacade.create(user);
+            }
+            request.getRequestDispatcher("ministryHome.jsp").include(request, response);
+            HttpSession s = request.getSession();
+            s.setAttribute("login", user);
+        }
         
         try (PrintWriter out = response.getWriter()) {    
             if (user != null) {
@@ -62,15 +71,15 @@ public class Login extends HttpServlet {
                 if (user.getPassword().equals(password)) {
                     HttpSession s = request.getSession();
                     s.setAttribute("login", user);
-                    //if is Ministry staff
+                    
                     switch (user.getUserType()) {
-                        case 0:
+                        case 0: //if is Ministry staff
                             request.getRequestDispatcher("ministryHome.jsp").include(request, response);
                             break;
-                        case 1:
+                        case 1: //if is Clinic staff
                             request.getRequestDispatcher("clinicHome.jsp").include(request, response);
                             break;
-                        case 2:
+                        case 2: //if is Public User
                             request.getRequestDispatcher("publicUserHome.jsp").include(request, response);
                             break;
                     }

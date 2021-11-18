@@ -7,26 +7,21 @@ package controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import model.Users;
-import model.UsersFacade;
 
 /**
  *
  * @author SLM
  */
-@WebServlet(name = "Register", urlPatterns = {"/Register"})
-public class Register extends HttpServlet {
+@WebServlet(name = "Logout", urlPatterns = {"/Logout"})
+public class Logout extends HttpServlet {
 
-    @EJB
-    private UsersFacade usersFacade;
-    
-    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -40,32 +35,13 @@ public class Register extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         
-        String userType = request.getParameter("userType");
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        String name = request.getParameter("name");
-        String phone = request.getParameter("phone");
-        String email = request.getParameter("email");
+        HttpSession s = request.getSession(false);
+        Users user = (Users)s.getAttribute("login");
+        s.invalidate();
         
-        Users user = null;
-        
-        if (userType.equals("Public User")) {
-            // for public user
-            String gender = request.getParameter("gender");
-            String ic = request.getParameter("ic");
-            
-            user = new Users(2, username, password, name, gender, ic, phone, email);
-            
-        } else if (userType.equals("Clinic")) {
-            // for clinic        
-            user = new Users(1, username, password, name, phone, email);
-        }
-        
-        usersFacade.create(user);
         try (PrintWriter out = response.getWriter()) {
             request.getRequestDispatcher("login.jsp").include(request, response);
-            out.println("<br><br>Thank you "+name+", registration is done!");
-            
+            out.println("<br><br>Thank you "+user.getName()+", See you again soon!");
         }
     }
 
