@@ -58,7 +58,7 @@
                     <td><input type="tel" name="phone" size="20" required></td>
                 </tr>
                 <tr>
-                    <td>IC:</td>
+                    <td>IC no.:</td>
                     <td><input type="text" name="ic" size="20" required></td>
                 </tr>
                 <tr>

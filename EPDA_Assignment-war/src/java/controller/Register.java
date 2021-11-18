@@ -13,10 +13,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import model.Clinic;
-import model.ClinicFacade;
-import model.PublicUser;
-import model.PublicUserFacade;
+import model.User;
+import model.UserFacade;
 
 /**
  *
@@ -26,10 +24,7 @@ import model.PublicUserFacade;
 public class Register extends HttpServlet {
 
     @EJB
-    private ClinicFacade clinicFacade;
-
-    @EJB
-    private PublicUserFacade publicUserFacade;
+    private UserFacade userFacade;
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -50,22 +45,25 @@ public class Register extends HttpServlet {
         String name = request.getParameter("name");
         String phone = request.getParameter("phone");
         String email = request.getParameter("email");
+        User user = null;
+        String gender = request.getParameter("gender");
+        String ic = request.getParameter("ic");
+        int a=1;
+        user = new User(a, username, password, name, gender, phone, ic, email);
         
-        if (userType.equals("Public User")) {
-            // for public user
-            String gender = request.getParameter("gender");
-            String ic = request.getParameter("ic");
+//        if (userType.equals("Public User")) {
+//            // for public user
+//            String gender = request.getParameter("gender");
+//            String ic = request.getParameter("ic");
+//            
+//            user = new User(2, username, password, name, gender, phone, ic, email);
+//            
+//        } else if (userType.equals("Clinic")) {
+//            // for clinic        
+//            user = new User(1, username, password, name, phone, email);
+//        }
         
-            PublicUser user = new PublicUser(username, password, name, 
-                    gender, phone, ic, email);
-            publicUserFacade.create(user);
-        
-        } else if (userType.equals("Clinic")) {
-            // for clinic        
-            Clinic user = new Clinic(username, password, 
-                    name, phone, email);
-            clinicFacade.create(user);
-        }
+        userFacade.create(user);
         
         try (PrintWriter out = response.getWriter()) {
             request.getRequestDispatcher("login.jsp").include(request, response);

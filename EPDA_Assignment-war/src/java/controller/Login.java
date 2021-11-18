@@ -14,12 +14,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import model.Clinic;
-import model.ClinicFacade;
-import model.Ministry;
-import model.MinistryFacade;
-import model.PublicUser;
-import model.PublicUserFacade;
+import javax.servlet.http.HttpSession;
+import model.User;
+import model.UserFacade;
 
 /**
  *
@@ -29,13 +26,7 @@ import model.PublicUserFacade;
 public class Login extends HttpServlet {
 
     @EJB
-    private MinistryFacade ministryFacade;
-
-    @EJB
-    private ClinicFacade clinicFacade;
-
-    @EJB
-    private PublicUserFacade publicUserFacade;
+    private UserFacade userFacade;
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -56,62 +47,43 @@ public class Login extends HttpServlet {
         // search for user 
         // can change to other popega method 
         
-        List<PublicUser> userList = publicUserFacade.findAll();
-        PublicUser user = null;        
+        List<User> userList = userFacade.findAll();
+        User user = null;        
         for (int i = 0; i < userList.size(); i++) {
             if (userList.get(i).getUsername().equals(username)) {
                 user = userList.get(i);
                 break;
             }
-        }
-        
-        List<Clinic> clinicList = clinicFacade.findAll();
-        Clinic clinic = null;
-        for (int i = 0; i < clinicList.size(); i++) {
-            if (clinicList.get(i).getUsername().equals(username)) {
-                clinic = clinicList.get(i);
-                break;
-            }
-        }
-        
-        List<Ministry> ministryList = ministryFacade.findAll();
-        Ministry ministry = null;
-        for (int i = 0; i < ministryList.size(); i++) {
-            if (ministryList.get(i).getUsername().equals(username)) {
-                ministry = ministryList.get(i);
-                break;
-            }
-        }        
+        }    
         
         try (PrintWriter out = response.getWriter()) {    
-            if (user != null || clinic != null || ministry != null ) {
+            if (user != null) {
                 // check user password
                 if (user.getPassword().equals(password)) {
-                    request.getRequestDispatcher("publicUserHome.jsp").include(request, response);
-                } 
-                // check clinic password
-                else if (clinic.getPassword().equals(password)) {
-                    request.getRequestDispatcher("clinicHome.jsp").include(request, response);
-                    out.println("clinic la");
+                    HttpSession s = request.getSession();
+                    s.setAttribute("login", user);
+                    //if is Ministry staff
+                    switch (user.getUserType()) {
+                        case 0:
+                            request.getRequestDispatcher("ministryHome.jsp").include(request, response);
+                            break;
+                        case 1:
+                            request.getRequestDispatcher("clinicHome.jsp").include(request, response);
+                            break;
+                        case 2:
+                            request.getRequestDispatcher("publicUserHome.jsp").include(request, response);
+                            break;
+                    }
                 }
-                // check ministry password
-                else if (ministry.getPassword().equals(password)) {
-                    request.getRequestDispatcher("ministryHome.jsp").include(request, response);
-                    out.println("ministry la");
-                } 
                 // all password wrong
                 else {
                     request.getRequestDispatcher("login.jsp").include(request, response);
-                    out.println("wrong password");
+                    out.println("wrong username or password");
                 }
             } else {
                 request.getRequestDispatcher("login.jsp").include(request, response); 
-                out.println("wrong username");
+                out.println("wrong username or password");
             }
-//            if (username.equals("admin") && password.equals("admin")){
-//                request.getRequestDispatcher("login.jsp").include(request , response);
-//                out.println("<br><br>nice");
-//            }
         }
     }
 

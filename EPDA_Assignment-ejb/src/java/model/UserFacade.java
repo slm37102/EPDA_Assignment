@@ -14,7 +14,7 @@ import javax.persistence.PersistenceContext;
  * @author SLM
  */
 @Stateless
-public class ClinicFacade extends AbstractFacade<Clinic> {
+public class UserFacade extends AbstractFacade<User> {
 
     @PersistenceContext(unitName = "EPDA_Assignment-ejbPU")
     private EntityManager em;
@@ -24,8 +24,8 @@ public class ClinicFacade extends AbstractFacade<Clinic> {
         return em;
     }
 
-    public ClinicFacade() {
-        super(Clinic.class);
+    public UserFacade() {
+        super(User.class);
     }
     
 }
