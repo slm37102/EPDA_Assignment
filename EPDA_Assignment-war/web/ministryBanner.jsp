@@ -12,10 +12,11 @@
         <title>Ministry Home Page</title>
     </head>
     <body>
-        <a href="ministryHome.jsp">Home</a> | 
-        <a href="">Edit Ministry</a> | 
-        <a href="">Edit Clinic</a> | 
-        <a href="">Edit Public User</a> | 
+        <a href="MinistryHome">Home</a> | 
+        <a href="MinistryManage">Ministry</a> | 
+        <a href="MinistryClinic">Clinic</a> | 
+        <a href="MinistryPublicUser">Public User</a> | 
+        <a href="editProfile.jsp">Edit Profile User</a> | 
         <a href="Logout">Logout</a>
     </body>
 </html>

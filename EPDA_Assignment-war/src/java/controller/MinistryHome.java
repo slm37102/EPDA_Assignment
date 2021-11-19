@@ -7,25 +7,24 @@ package controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import model.Users;
-import model.UsersFacade;
+import model.Appointment;
+import model.AppointmentFacade;
 
 /**
  *
  * @author SLM
  */
-@WebServlet(name = "EditProfile", urlPatterns = {"/EditProfile"})
-public class EditProfile extends HttpServlet {
-
+@WebServlet(name = "MinistryHome", urlPatterns = {"/MinistryHome"})
+public class MinistryHome extends HttpServlet {
     @EJB
-    private UsersFacade usersFacade;
+    private AppointmentFacade appointmentFacade;
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,51 +38,48 @@ public class EditProfile extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        HttpSession s = request.getSession(false);
-        Users user = (Users)s.getAttribute("login");
         
-        String userType = request.getParameter("userType");
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        String name = request.getParameter("name");
-        String phone = request.getParameter("phone");
-        String email = request.getParameter("email");
+        request.getRequestDispatcher("ministryBanner.jsp").include(request, response);
         
-        
-        if (user.getUserType() != 1) {
-            // for ministry and public user
-            String gender = request.getParameter("gender");
-            String ic = request.getParameter("ic");
-            user.setUsername(username);
-            user.setPassword(password);
-            user.setName(name);
-            user.setGender(gender);
-            user.setIc(ic);
-            user.setPhone(phone);
-            user.setEmail(email);
-        } else {
-            // for clinic
-            user.setUsername(username);
-            user.setPassword(password);
-            user.setName(name);
-            user.setPhone(phone);
-            user.setEmail(email);
-        }
-        
-        usersFacade.edit(user);
+        List<Appointment> appointmentList = appointmentFacade.findAll();
         
         try (PrintWriter out = response.getWriter()) {
-            switch (user.getUserType()) {
-                case 0:
-                    request.getRequestDispatcher("MinistryHome").include(request, response);
-                    break;
-                case 1:
-                    request.getRequestDispatcher("clinicHome.jsp").include(request, response);
-                    break;
-                case 2:
-                    request.getRequestDispatcher("publicUserHome.jsp").include(request, response);
-                    break;
+            // if has appointment
+            if (appointmentList.size() > 0) {
+                out.println("<br><br><table>\n" +
+                "  <tr>\n" +
+                "    <th>Public User</th>\n" +
+                "    <th>Clinic</th>\n" +
+                "    <th>Date</th>\n" +
+                "    <th>Dose</th>\n" +
+                "    <th>Accept appointment</th>\n" +
+                "    <th>Finished Vaccine</th>\n" +
+                "    <th>Edit</th>\n" +
+                "    <th>Delete</th>\n" +
+                "  </tr>");
+
+                for (int i = 0; i < appointmentList.size(); i++) {
+                    //print tables row
+                    out.print("  <tr>\n" +
+                        "    <td>"+appointmentList.get(i).getUserId()+"</td>\n" +
+                        "    <td>"+appointmentList.get(i).getClinicId()+"</td>\n" +
+                        "    <td>"+appointmentList.get(i).getAppointDate()+"</td>\n" +
+                        "    <td>"+appointmentList.get(i).getNumDose()+"</td>\n" +
+                        "    <td>"+appointmentList.get(i).isAccepted()+"</td>\n" +
+                        "    <td>"+appointmentList.get(i).isFinishVac()+"</td>\n" +
+                        "    <td><a href=\"\">Edit</a> |</td>\n" +
+                        "    <td><a href=\"\">Delete</a> |</td>\n" +
+                        "  </tr>");
+                }
+                out.print("</table>");
+            } 
+            // No appointment
+            else {
+                out.print("<br><br>No Appointment");
             }
+            out.print("<br><br><form action=\"appointmentRegister.jsp\">\n" +
+                        "    <input type=\"submit\" value=\"Create New Appointment\" />\n" +
+                        "</form>");
         }
     }
 

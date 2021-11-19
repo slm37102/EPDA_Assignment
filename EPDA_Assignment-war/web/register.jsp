@@ -4,6 +4,7 @@
     Author     : SLM
 --%>
 
+<%@page import="model.Users"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -12,13 +13,26 @@
         <title>Register Page</title>
     </head>
     <body>
-        <a href="login.jsp">Back</a>
+        <%
+            HttpSession s = request.getSession(false);
+            
+            if (s.getAttribute("login") == null) {
+                request.setAttribute("backPage","login.jsp");
+            } else {
+                request.setAttribute("backPage","MinistryManage");
+            }  
+        %>
+        <a href="${backPage}">Back</a>
         <br><br>
         <%--
+            // TODO: change Clinic to not show gender and ic
             boolean isCheck = false;
         --%>
         <form action="Register" method="POST">
             <table>
+                <%
+                    if (s.getAttribute("login") == null) {
+                %>
                 <tr>
                     <td>Are you a Public User or a Clinic:</td>
                     <td>
@@ -30,6 +44,7 @@
                         <label for="userType2">Clinic</label>
                     </td>
                 </tr>
+                <%}%>
                 <tr>
                     <td>Username:</td>
                     <td><input type="text" name="username" size="20" required></td>

@@ -26,15 +26,17 @@ public class Appointment implements Serializable {
     private Long userId;
     private Long clinicId;
     private Date appointDate;
-    private int numDoze;
+    private int numDose;
     private boolean accepted;
     private boolean finishVac;
 
-    public Appointment(Long userId, Long clinicId, Date appointDate, int numDoze) {
+    public Appointment(Long userId, Long clinicId, Date appointDate, int numDose) {
         this.userId = userId;
         this.clinicId = clinicId;
         this.appointDate = appointDate;
-        this.numDoze = numDoze;
+        this.numDose = numDose;
+        this.accepted = false;
+        this.finishVac = false;
     }
 
     public Appointment() {
@@ -72,12 +74,12 @@ public class Appointment implements Serializable {
         this.appointDate = appointDate;
     }
 
-    public int getNumDoze() {
-        return numDoze;
+    public int getNumDose() {
+        return numDose;
     }
 
-    public void setNumDoze(int numDoze) {
-        this.numDoze = numDoze;
+    public void setNumDose(int numDose) {
+        this.numDose = numDose;
     }
 
     public boolean isAccepted() {

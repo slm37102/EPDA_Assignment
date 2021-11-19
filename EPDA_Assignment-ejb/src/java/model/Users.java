@@ -10,12 +10,27 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 /**
  *
  * @author SLM
  */
 @Entity
+@NamedQueries({
+    @NamedQuery(name = "Users.findUser",
+            query = "SELECT x FROM Users x WHERE x.name = :a"), 
+    
+    @NamedQuery(name = "Users.findAllMinistry",
+            query = "SELECT x FROM Users x WHERE x.userType = 0"), 
+    
+    @NamedQuery(name = "Users.findAllClinic",
+            query = "SELECT x FROM Users x WHERE x.userType = 1"), 
+    
+    @NamedQuery(name = "Users.findAllPublicUser",
+            query = "SELECT x FROM Users x WHERE x.userType = 2")
+})
 public class Users implements Serializable {
 
     private static final long serialVersionUID = 1L;

@@ -13,6 +13,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import model.Users;
 import model.UsersFacade;
 
@@ -47,25 +48,38 @@ public class Register extends HttpServlet {
         String phone = request.getParameter("phone");
         String email = request.getParameter("email");
         
-        Users user = null;
+        Users newUser = null;
         
-        if (userType.equals("Public User")) {
+        if (usersFacade.findUser(username) == null) {
+            HttpSession s = request.getSession(false);
+            // for ministry staff (only login able to access)
+            if (s.getAttribute("login") != null) {
+                String gender = request.getParameter("gender");
+                String ic = request.getParameter("ic");
+                newUser = new Users(0, username, password, name, gender, ic, phone, email);
+            } 
+            // for clinic staff
+            else if (userType.equals("Clinic")) {       
+                newUser = new Users(1, username, password, name, phone, email);
+            }
             // for public user
-            String gender = request.getParameter("gender");
-            String ic = request.getParameter("ic");
-            
-            user = new Users(2, username, password, name, gender, ic, phone, email);
-            
-        } else if (userType.equals("Clinic")) {
-            // for clinic        
-            user = new Users(1, username, password, name, phone, email);
+            else if (userType.equals("Public User")) {
+                String gender = request.getParameter("gender");
+                String ic = request.getParameter("ic");
+                newUser = new Users(2, username, password, name, gender, ic, phone, email);
+            }
+
+            usersFacade.create(newUser);
         }
         
-        usersFacade.create(user);
         try (PrintWriter out = response.getWriter()) {
-            request.getRequestDispatcher("login.jsp").include(request, response);
-            out.println("<br><br>Thank you "+name+", registration is done!");
-            
+            if (newUser == null) {
+                request.getRequestDispatcher("register.jsp").include(request, response);
+                out.println("<br><br>Username "+ username +" has been used");
+            } else {
+                request.getRequestDispatcher("login.jsp").include(request, response);
+                out.println("<br><br>Thank you "+name+", registration is done!");
+            }
         }
     }
 

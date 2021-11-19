@@ -26,7 +26,7 @@
             boolean notClinic = true;
             switch (user.getUserType()) {
                 case 0:
-                    backPage = "ministryHome.jsp";
+                    backPage = "MinistryHome";
                     break;
                 case 1:
                     backPage = "clinicHome.jsp";
@@ -37,7 +37,7 @@
                     break;
             }
             request.setAttribute("backPage",backPage);
-            request.setAttribute("isClinic",notClinic);
+            request.setAttribute("notClinic",notClinic);
         %>
         <a href=${backPage}>Back</a>
         <br><br>

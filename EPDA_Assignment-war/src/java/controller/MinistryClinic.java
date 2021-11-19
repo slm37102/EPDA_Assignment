@@ -22,11 +22,10 @@ import model.UsersFacade;
  *
  * @author SLM
  */
-@WebServlet(name = "Login", urlPatterns = {"/Login"})
-public class Login extends HttpServlet {
-
+@WebServlet(name = "MinistryClinic", urlPatterns = {"/MinistryClinic"})
+public class MinistryClinic extends HttpServlet {
     @EJB
-    private UsersFacade userFacade;
+    private UsersFacade usersFacade;
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -41,58 +40,35 @@ public class Login extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
+        request.getRequestDispatcher("ministryBanner.jsp").include(request, response);
         
-        // search for user 
-        // can change to other popega method 
-        Users user = null;
-        List<Users> userList = userFacade.findAll();
-        for (int i = 0; i < userList.size(); i++) {
-            if (userList.get(i).getUsername().equals(username)) {
-                user = userList.get(i);
-                break;
-            }
-        }
-        if (username.equals("admin") && password.equals("admin")) {
-            //if no admin in table add admin
-            if (user == null) {
-                user = new Users(0, "admin", "admin", "-", "-", "-", "-", "-");
-                userFacade.create(user);
-            }
-            request.getRequestDispatcher("/MinistryHome").forward(request, response);
-            HttpSession s = request.getSession();
-            s.setAttribute("login", user);
-        }
+        HttpSession s = request.getSession(false);
+        Users user = (Users)s.getAttribute("login");
         
-        try (PrintWriter out = response.getWriter()) {    
-            if (user != null) {
-                // check user password
-                if (user.getPassword().equals(password)) {
-                    HttpSession s = request.getSession();
-                    s.setAttribute("login", user);
-                    
-                    switch (user.getUserType()) {
-                        case 0: //if is Ministry staff
-                            request.getRequestDispatcher("/MinistryHome").include(request, response);
-                            break;
-                        case 1: //if is Clinic staff
-                            request.getRequestDispatcher("clinicHome.jsp").include(request, response);
-                            break;
-                        case 2: //if is Public User
-                            request.getRequestDispatcher("publicUserHome.jsp").include(request, response);
-                            break;
-                    }
-                }
-                // all password wrong
-                else {
-                    request.getRequestDispatcher("login.jsp").include(request, response);
-                    out.println("wrong username or password");
-                }
-            } else {
-                request.getRequestDispatcher("login.jsp").include(request, response); 
-                out.println("wrong username or password");
+        List<Users> userList = usersFacade.findAllClinic();
+        try (PrintWriter out = response.getWriter()) {
+            out.println("<br><br>Clinic Staff Infomation");
+            //print tables header
+            out.println("<br><br><table>\n" +
+                "  <tr>\n" +
+                "    <th>Name</th>\n" +
+                "    <th>Phone Number</th>\n" +
+                "    <th>Email</th>\n" +
+                "    <th>Edit</th>\n" +
+                "    <th>Delete</th>\n" +
+                "  </tr>");
+            
+            for (int i = 0; i < userList.size(); i++) {
+                //print tables row
+                out.print("  <tr>\n" +
+                    "    <td>"+userList.get(i).getName()+"</td>\n" +
+                    "    <td>"+userList.get(i).getPhone()+"</td>\n" +
+                    "    <td>"+userList.get(i).getEmail()+"</td>\n" +
+                    "    <td><a href=\"\">Edit</a> |</td>\n" +
+                    "    <td><a href=\"\">Delete</a> |</td>\n" +
+                    "  </tr>");
             }
+            out.print("</table><br>");
         }
     }
 
