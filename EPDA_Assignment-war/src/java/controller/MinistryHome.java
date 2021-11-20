@@ -7,6 +7,7 @@ package controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -14,6 +15,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import model.Appointment;
 import model.AppointmentFacade;
 
@@ -43,14 +45,19 @@ public class MinistryHome extends HttpServlet {
         
         List<Appointment> appointmentList = appointmentFacade.findAll();
         
+        HttpSession s = request.getSession(false);
+        s.setAttribute("appointmentList", appointmentList);
+        
         try (PrintWriter out = response.getWriter()) {
             // if has appointment
             if (appointmentList.size() > 0) {
                 out.println("<br><br><table>\n" +
                 "  <tr>\n" +
+                "    <th>Appointment ID</th>\n" +
                 "    <th>Public User</th>\n" +
                 "    <th>Clinic</th>\n" +
-                "    <th>Date</th>\n" +
+                "    <th>Appointment Date</th>\n" +
+                "    <th>Appointment Time</th>\n" +
                 "    <th>Dose</th>\n" +
                 "    <th>Accept appointment</th>\n" +
                 "    <th>Finished Vaccine</th>\n" +
@@ -59,16 +66,21 @@ public class MinistryHome extends HttpServlet {
                 "  </tr>");
 
                 for (int i = 0; i < appointmentList.size(); i++) {
+                    // convert date format to date and time
+                    String stringDate = new SimpleDateFormat("yyyy-MM-dd").format(appointmentList.get(i).getAppointDate());
+                    String stringTime = new SimpleDateFormat("HH:mm").format(appointmentList.get(i).getAppointDate());
                     //print tables row
                     out.print("  <tr>\n" +
+                        "    <td>"+appointmentList.get(i).getId()+"</td>\n" +
                         "    <td>"+appointmentList.get(i).getUserId()+"</td>\n" +
                         "    <td>"+appointmentList.get(i).getClinicId()+"</td>\n" +
-                        "    <td>"+appointmentList.get(i).getAppointDate()+"</td>\n" +
+                        "    <td>"+stringDate+"</td>\n" +
+                        "    <td>"+stringTime+"</td>\n" +
                         "    <td>"+appointmentList.get(i).getNumDose()+"</td>\n" +
                         "    <td>"+appointmentList.get(i).isAccepted()+"</td>\n" +
                         "    <td>"+appointmentList.get(i).isFinishVac()+"</td>\n" +
-                        "    <td><a href=\"\">Edit</a> |</td>\n" +
-                        "    <td><a href=\"\">Delete</a> |</td>\n" +
+                    "    <td><a href=\"appointmentEdit.jsp?i="+i+"\">Edit</a> |</td>\n" +
+                    "    <td><a href=\"AppointmentDelete?id="+appointmentList.get(i).getId()+"\">Delete</a> |</td>\n" +
                         "  </tr>");
                 }
                 out.print("</table>");
@@ -77,9 +89,13 @@ public class MinistryHome extends HttpServlet {
             else {
                 out.print("<br><br>No Appointment");
             }
-            out.print("<br><br><form action=\"appointmentRegister.jsp\">\n" +
+            out.print("<br><form action=\"appointmentRegister.jsp\">\n" +
                         "    <input type=\"submit\" value=\"Create New Appointment\" />\n" +
                         "</form>");
+            
+            if (request.getParameter("deletedId") != null) {
+                out.print("<br>Appointment "+request.getParameter("deletedId")+" has been deleted.");
+            }
         }
     }
 

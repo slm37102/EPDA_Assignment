@@ -42,10 +42,11 @@ public class MinistryClinic extends HttpServlet {
         
         request.getRequestDispatcher("ministryBanner.jsp").include(request, response);
         
-        HttpSession s = request.getSession(false);
-        Users user = (Users)s.getAttribute("login");
-        
         List<Users> userList = usersFacade.findAllClinic();
+        
+        HttpSession s = request.getSession(false);
+        s.setAttribute("userList", userList);
+        
         try (PrintWriter out = response.getWriter()) {
             out.println("<br><br>Clinic Staff Infomation");
             //print tables header
@@ -64,11 +65,15 @@ public class MinistryClinic extends HttpServlet {
                     "    <td>"+userList.get(i).getName()+"</td>\n" +
                     "    <td>"+userList.get(i).getPhone()+"</td>\n" +
                     "    <td>"+userList.get(i).getEmail()+"</td>\n" +
-                    "    <td><a href=\"\">Edit</a> |</td>\n" +
-                    "    <td><a href=\"\">Delete</a> |</td>\n" +
+                    "    <td><a href=\"editProfile.jsp?i="+i+"&from=MinistryClinic\">Edit</a> |</td>\n" +
+                    "    <td><a href=\"UserDelete?id="+userList.get(i).getId()+"&from=MinistryClinic\">Delete</a> |</td>\n" +
                     "  </tr>");
             }
             out.print("</table><br>");
+            
+            if (request.getParameter("deletedName") != null) {
+                out.print("<br>User "+ request.getParameter("deletedName") +" has been deleted.");
+            }
         }
     }
 

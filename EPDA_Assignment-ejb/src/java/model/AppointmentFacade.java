@@ -5,9 +5,11 @@
  */
 package model;
 
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -28,4 +30,15 @@ public class AppointmentFacade extends AbstractFacade<Appointment> {
         super(Appointment.class);
     }
     
+    public List<Users> findAllFromClinic(Long clinicId){        
+        Query q = em.createNamedQuery("Users.findAllClinic");
+        q.setParameter("a", clinicId);
+        return q.getResultList();
+    }
+    
+    public List<Users> findAllFromPublicUser(Long userId){
+        Query q = em.createNamedQuery("Users.findAllPublicUser");
+        q.setParameter("a", userId);
+        return q.getResultList();
+    }
 }

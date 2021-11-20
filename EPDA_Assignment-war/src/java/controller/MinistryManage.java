@@ -43,10 +43,11 @@ public class MinistryManage extends HttpServlet {
         
         request.getRequestDispatcher("ministryBanner.jsp").include(request, response);
         
+        List<Users> userList = usersFacade.findAllMinistry();
+        
         HttpSession s = request.getSession(false);
         Users user = (Users)s.getAttribute("login");
-        
-        List<Users> userList = usersFacade.findAllMinistry();
+        s.setAttribute("userList", userList);
         
         try (PrintWriter out = response.getWriter()) {
             out.println("<br><br>Ministry Staff Infomation");
@@ -62,23 +63,33 @@ public class MinistryManage extends HttpServlet {
                 "    <th>Delete</th>\n" +
                 "  </tr>");
             
-            // TODO: delete current user in table
-            
             for (int i = 0; i < userList.size(); i++) {
                 //print tables row
                 out.print("  <tr>\n" +
                     "    <td>"+userList.get(i).getName()+"</td>\n" +
                     "    <td>"+userList.get(i).getGender()+"</td>\n" +
                     "    <td>"+userList.get(i).getPhone()+"</td>\n" +
-                    "    <td>"+userList.get(i).getEmail()+"</td>\n" +
-                    "    <td><a href=\"\">Edit</a> |</td>\n" +
-                    "    <td><a href=\"\">Delete</a> |</td>\n" +
-                    "  </tr>");
+                    "    <td>"+userList.get(i).getEmail()+"</td>\n");
+                
+                // if delete current user in table
+                if (user != userList.get(i)) {
+                    out.print("    <td><a href=\"editProfile.jsp?i="+i+"&from=MinistryManage\">Edit</a> |</td>\n" +
+                        "    <td><a href=\"UserDelete?id="+userList.get(i).getId()+"&from=MinistryManage\">Delete</a> |</td>\n" +
+                        "  </tr>");
+                } else {
+                    out.print("<td></td>\n" +
+                        "<td></td>\n" +
+                        "</tr>");
+                }
             }
-            out.print("</table><br><br>" +
+            out.print("</table><br>" +
                     "<form action=\"register.jsp\">\n" +
                     "    <input type=\"submit\" value=\"Create New Ministry Staff\" />\n" +
                     "</form>");
+            
+            if (request.getParameter("deletedName") != null) {
+                out.print("<br>User "+ request.getParameter("deletedName") +" has been deleted.");
+            }
         }
     }
 

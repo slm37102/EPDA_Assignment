@@ -16,11 +16,12 @@
         <%
             HttpSession s = request.getSession(false);
             
+            // if not login yet
             if (s.getAttribute("login") == null) {
                 request.setAttribute("backPage","login.jsp");
             } else {
                 request.setAttribute("backPage","MinistryManage");
-            }  
+            }
         %>
         <a href="${backPage}">Back</a>
         <br><br>
@@ -31,6 +32,7 @@
         <form action="Register" method="POST">
             <table>
                 <%
+                    // if not login yet
                     if (s.getAttribute("login") == null) {
                 %>
                 <tr>
@@ -44,7 +46,9 @@
                         <label for="userType2">Clinic</label>
                     </td>
                 </tr>
-                <%}%>
+                <%
+                    }
+                %>
                 <tr>
                     <td>Username:</td>
                     <td><input type="text" name="username" size="20" required></td>

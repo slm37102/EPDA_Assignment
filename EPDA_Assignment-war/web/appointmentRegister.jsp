@@ -12,11 +12,8 @@
         <title>Appointment Register Page</title>
     </head>
     <body>
-        <a href="/MinistryHome">Back</a>
+        <a href="MinistryHome">Back</a>
         <br><br>
-        <%--
-            boolean isCheck = false;
-        --%>
         <form action="AppointmentRegister" method="POST">
             <table>
                 <tr>
@@ -29,7 +26,11 @@
                 </tr>
                 <tr>
                     <td>Appointment Date:</td>
-                    <td><input type="text" name="date" size="20" required></td>
+                    <td><input type="date" name="date" size="20" required></td>
+                </tr>
+                <tr>
+                    <td>Appointment Time</td>
+                    <td><input type="time" name="time" size="20" required></td>
                 </tr>
                 <tr>
                     <td>Dosage to take:</td>

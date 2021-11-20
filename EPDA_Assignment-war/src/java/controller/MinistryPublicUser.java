@@ -43,6 +43,10 @@ public class MinistryPublicUser extends HttpServlet {
         request.getRequestDispatcher("ministryBanner.jsp").include(request, response);
         
         List<Users> userList = usersFacade.findAllPublicUser();
+        
+        HttpSession s = request.getSession(false);
+        s.setAttribute("userList", userList);
+        
         try (PrintWriter out = response.getWriter()) {
             out.println("<br><br>Public User Infomation");
 
@@ -64,11 +68,15 @@ public class MinistryPublicUser extends HttpServlet {
                     "    <td>"+userList.get(i).getGender()+"</td>\n" +
                     "    <td>"+userList.get(i).getPhone()+"</td>\n" +
                     "    <td>"+userList.get(i).getEmail()+"</td>\n" +
-                    "    <td><a href=\"\">Edit</a> |</td>\n" +
-                    "    <td><a href=\"\">Delete</a> |</td>\n" +
+                    "    <td><a href=\"editProfile.jsp?i="+i+"&from=MinistryPublicUser\">Edit</a> |</td>\n" +
+                    "    <td><a href=\"UserDelete?id="+userList.get(i).getId()+"&from=MinistryPublicUser\">Delete</a> |</td>\n" +
                     "  </tr>");
             }
             out.print("</table><br>");
+            
+            if (request.getParameter("deletedName") != null) {
+                out.print("<br>User "+ request.getParameter("deletedName") +" has been deleted.");
+            }
         }
     }
 

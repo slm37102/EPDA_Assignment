@@ -11,12 +11,22 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Temporal;
 
 /**
  *
  * @author SLM
  */
 @Entity
+@NamedQueries({    
+    @NamedQuery(name = "Users.findAllClinic",
+            query = "SELECT x FROM Users x WHERE x.clinicId = :a"), 
+    
+    @NamedQuery(name = "Users.findAllPublicUser",
+            query = "SELECT x FROM Users x WHERE x.userId = :a")
+})
 public class Appointment implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -35,7 +45,7 @@ public class Appointment implements Serializable {
         this.clinicId = clinicId;
         this.appointDate = appointDate;
         this.numDose = numDose;
-        this.accepted = false;
+        // accepted save as null
         this.finishVac = false;
     }
 

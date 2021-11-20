@@ -7,28 +7,24 @@ package controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.ParseException;
-import java.util.Date;
-import java.text.SimpleDateFormat;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import model.Appointment;
-import model.AppointmentFacade;
+import model.Users;
+import model.UsersFacade;
 
 /**
  *
  * @author SLM
  */
-@WebServlet(name = "AppointmentRegister", urlPatterns = {"/AppointmentRegister"})
-public class AppointmentRegister extends HttpServlet {
-
+@WebServlet(name = "UserDelete", urlPatterns = {"/UserDelete"})
+public class UserDelete extends HttpServlet {
     @EJB
-    private AppointmentFacade appointmentFacade;
-    
+    private UsersFacade usersFacade;
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -41,22 +37,12 @@ public class AppointmentRegister extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try {
-            Long userId = Long.parseLong(request.getParameter("userId"));
-            Long clinicId = Long.parseLong(request.getParameter("clinicId"));  
-            String datetime = request.getParameter("date") + " " + request.getParameter("time");
-            Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(datetime);
-            int dose = Integer.parseInt(request.getParameter("dose"));
-
-            Appointment appointment = new Appointment(userId, clinicId, date, dose);
-            appointmentFacade.create(appointment);
-        } catch (NumberFormatException | ParseException e) {}
         
-        try (PrintWriter out = response.getWriter()) {
-            request.getRequestDispatcher("/MinistryHome").include(request, response);
-            // cannot print
-            out.println("<br><br>Appointment has been registered.");
-        }
+        Long id = Long.parseLong(request.getParameter("id"));
+        String from = request.getParameter("from");
+        Users user = usersFacade.find(id);
+        usersFacade.remove(user);
+        request.getRequestDispatcher("/"+from+"?deletedName="+user.getName()).include(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

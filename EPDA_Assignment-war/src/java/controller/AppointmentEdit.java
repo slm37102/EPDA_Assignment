@@ -8,8 +8,8 @@ package controller;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.ParseException;
-import java.util.Date;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -23,8 +23,8 @@ import model.AppointmentFacade;
  *
  * @author SLM
  */
-@WebServlet(name = "AppointmentRegister", urlPatterns = {"/AppointmentRegister"})
-public class AppointmentRegister extends HttpServlet {
+@WebServlet(name = "AppointmentEdit", urlPatterns = {"/AppointmentEdit"})
+public class AppointmentEdit extends HttpServlet {
 
     @EJB
     private AppointmentFacade appointmentFacade;
@@ -41,21 +41,30 @@ public class AppointmentRegister extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        
         try {
             Long userId = Long.parseLong(request.getParameter("userId"));
             Long clinicId = Long.parseLong(request.getParameter("clinicId"));  
             String datetime = request.getParameter("date") + " " + request.getParameter("time");
             Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(datetime);
             int dose = Integer.parseInt(request.getParameter("dose"));
-
-            Appointment appointment = new Appointment(userId, clinicId, date, dose);
-            appointmentFacade.create(appointment);
+            
+            int i = Integer.parseInt(request.getParameter("i"));
+            Appointment appointment = appointmentFacade.findAll().get(i);
+            
+            appointment.setUserId(userId);
+            appointment.setClinicId(clinicId);
+            appointment.setAppointDate(date);
+            appointment.setNumDose(dose);
+            
+            appointmentFacade.edit(appointment);
+            
         } catch (NumberFormatException | ParseException e) {}
         
         try (PrintWriter out = response.getWriter()) {
             request.getRequestDispatcher("/MinistryHome").include(request, response);
-            // cannot print
-            out.println("<br><br>Appointment has been registered.");
+            // not shown
+            out.println("<br><br>Appointment has been updated.");
         }
     }
 

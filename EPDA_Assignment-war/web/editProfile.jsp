@@ -3,6 +3,7 @@
     Created on : Nov 17, 2021, 11:26:57 PM
     Author     : SLM
 --%>
+<%@page import="java.util.List"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page import="model.Users"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -15,27 +16,40 @@
     <body>
         <%
             HttpSession s = request.getSession(false);
-            Users user = (Users)s.getAttribute("login");
+            Users user;
+            String backPage = request.getParameter("from");;
+            boolean notClinic = true;
+            
+            // if is edited by Ministry
+            if (backPage != null) {
+                int i = Integer.parseInt(request.getParameter("i"));
+                user = ((List<Users>)s.getAttribute("userList")).get(i);
+                if (user.getUserType() == 1) {
+                    notClinic = false;
+                }
+            } 
+            // if is edited by User himself
+            else {
+                user = (Users)s.getAttribute("login");
+                switch (user.getUserType()) {
+                    case 0:
+                        backPage = "MinistryHome";
+                        break;
+                    case 1:
+                        backPage = "clinicHome.jsp";
+                        notClinic = false;
+                        break;
+                    case 2:
+                        backPage = "publicUserHome.jsp";
+                        break;
+                }
+            }
+            
             request.setAttribute("username", user.getUsername());
             request.setAttribute("password", user.getPassword());
             request.setAttribute("name", user.getName());
             request.setAttribute("phone", user.getPhone());
-            request.setAttribute("email", user.getEmail());
-            
-            String backPage = "";
-            boolean notClinic = true;
-            switch (user.getUserType()) {
-                case 0:
-                    backPage = "MinistryHome";
-                    break;
-                case 1:
-                    backPage = "clinicHome.jsp";
-                    notClinic = false;
-                    break;
-                case 2:
-                    backPage = "publicUserHome.jsp";
-                    break;
-            }
+            request.setAttribute("email", user.getEmail());            
             request.setAttribute("backPage",backPage);
             request.setAttribute("notClinic",notClinic);
         %>
