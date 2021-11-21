@@ -13,7 +13,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.Temporal;
 
 /**
  *
@@ -21,11 +20,11 @@ import javax.persistence.Temporal;
  */
 @Entity
 @NamedQueries({    
-    @NamedQuery(name = "Users.findAllClinic",
-            query = "SELECT x FROM Users x WHERE x.clinicId = :a"), 
+    @NamedQuery(name = "Appointment.findAllClinic",
+            query = "SELECT x FROM Appointment x WHERE x.clinicId = :a"), 
     
-    @NamedQuery(name = "Users.findAllPublicUser",
-            query = "SELECT x FROM Users x WHERE x.userId = :a")
+    @NamedQuery(name = "Appointment.findAllPublicUser",
+            query = "SELECT x FROM Appointment x WHERE x.userId = :a")
 })
 public class Appointment implements Serializable {
 
@@ -37,7 +36,8 @@ public class Appointment implements Serializable {
     private Long clinicId;
     private Date appointDate;
     private int numDose;
-    private boolean accepted;
+    // not respond = 0, accept = 1, reject =-1 
+    private int accepted;
     private boolean finishVac;
 
     public Appointment(Long userId, Long clinicId, Date appointDate, int numDose) {
@@ -92,11 +92,11 @@ public class Appointment implements Serializable {
         this.numDose = numDose;
     }
 
-    public boolean isAccepted() {
+    public int isAccepted() {
         return accepted;
     }
 
-    public void setAccepted(boolean accepted) {
+    public void setAccepted(int accepted) {
         this.accepted = accepted;
     }
 

@@ -12,7 +12,7 @@
         <title>Clinic Home Page</title>
     </head>
     <body>
-        <a href="clinicHome.jsp">Home</a> | 
+        <a href="ClinicHome">Home</a> | 
         <a href="editProfile.jsp">Edit Profile</a> | 
         <a href="Logout">Logout</a>
     </body>

@@ -17,7 +17,8 @@
         <%
             HttpSession s = request.getSession(false);
             Users user;
-            String backPage = request.getParameter("from");;
+            // only from Ministry manage has from variable
+            String backPage = request.getParameter("from");
             boolean notClinic = true;
             
             // if is edited by Ministry
@@ -36,15 +37,16 @@
                         backPage = "MinistryHome";
                         break;
                     case 1:
-                        backPage = "clinicHome.jsp";
+                        backPage = "ClinicHome";
                         notClinic = false;
                         break;
                     case 2:
-                        backPage = "publicUserHome.jsp";
+                        backPage = "PublicUserHome";
                         break;
                 }
             }
             
+            request.setAttribute("id", user.getId());
             request.setAttribute("username", user.getUsername());
             request.setAttribute("password", user.getPassword());
             request.setAttribute("name", user.getName());
@@ -55,7 +57,7 @@
         %>
         <a href=${backPage}>Back</a>
         <br><br>
-        <form action="EditProfile" method="POST">
+        <form action="EditProfile?id=${id}" method="POST">
             <table>                
                 <tr>
                     <td>Username:</td>

@@ -30,14 +30,14 @@ public class AppointmentFacade extends AbstractFacade<Appointment> {
         super(Appointment.class);
     }
     
-    public List<Users> findAllFromClinic(Long clinicId){        
-        Query q = em.createNamedQuery("Users.findAllClinic");
+    public List<Appointment> findAllFromClinic(Long clinicId){        
+        Query q = em.createNamedQuery("Appointment.findAllClinic");
         q.setParameter("a", clinicId);
         return q.getResultList();
     }
     
-    public List<Users> findAllFromPublicUser(Long userId){
-        Query q = em.createNamedQuery("Users.findAllPublicUser");
+    public List<Appointment> findAllFromPublicUser(Long userId){
+        Query q = em.createNamedQuery("Appointment.findAllPublicUser");
         q.setParameter("a", userId);
         return q.getResultList();
     }

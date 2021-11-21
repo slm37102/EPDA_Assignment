@@ -13,19 +13,17 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import model.Users;
-import model.UsersFacade;
+import model.Appointment;
+import model.AppointmentFacade;
 
 /**
  *
  * @author SLM
  */
-@WebServlet(name = "EditProfile", urlPatterns = {"/EditProfile"})
-public class EditProfile extends HttpServlet {
-
+@WebServlet(name = "AppointmentAccepted", urlPatterns = {"/AppointmentAccepted"})
+public class AppointmentAccepted extends HttpServlet {
     @EJB
-    private UsersFacade usersFacade;
+    private AppointmentFacade appointmentFacade;
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -41,43 +39,12 @@ public class EditProfile extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         
         Long id = Long.parseLong(request.getParameter("id"));
-        Users user = usersFacade.find(id);
+        int option = Integer.parseInt(request.getParameter("option"));
+        Appointment appointment = appointmentFacade.find(id);
+        appointment.setAccepted(option);
+        appointmentFacade.edit(appointment);
         
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        String name = request.getParameter("name");
-        String phone = request.getParameter("phone");
-        String email = request.getParameter("email");
-        
-        if (user.getUserType() != 1) {
-            // for ministry and public user
-            String gender = request.getParameter("gender");
-            String ic = request.getParameter("ic");
-            user.setGender(gender);
-            user.setIc(ic);
-        }
-        
-        user.setUsername(username);
-        user.setPassword(password);
-        user.setName(name);
-        user.setPhone(phone);
-        user.setEmail(email);
-
-        usersFacade.edit(user);
-        
-        try (PrintWriter out = response.getWriter()) {
-            switch (user.getUserType()) {
-                case 0:
-                    request.getRequestDispatcher("MinistryHome").include(request, response);
-                    break;
-                case 1:
-                    request.getRequestDispatcher("clinicHome.jsp").include(request, response);
-                    break;
-                case 2:
-                    request.getRequestDispatcher("publicUserHome.jsp").include(request, response);
-                    break;
-            }
-        }
+        request.getRequestDispatcher("PublicUserHome?finishedId="+id).include(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

@@ -74,13 +74,13 @@ public class Login extends HttpServlet {
                     
                     switch (user.getUserType()) {
                         case 0: //if is Ministry staff
-                            request.getRequestDispatcher("/MinistryHome").include(request, response);
+                            request.getRequestDispatcher("MinistryHome").include(request, response);
                             break;
                         case 1: //if is Clinic staff
-                            request.getRequestDispatcher("clinicHome.jsp").include(request, response);
+                            request.getRequestDispatcher("ClinicHome").include(request, response);
                             break;
                         case 2: //if is Public User
-                            request.getRequestDispatcher("publicUserHome.jsp").include(request, response);
+                            request.getRequestDispatcher("PublicUserHome").include(request, response);
                             break;
                     }
                 }

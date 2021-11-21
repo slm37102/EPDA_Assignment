@@ -44,13 +44,27 @@ public class MinistryManage extends HttpServlet {
         request.getRequestDispatcher("ministryBanner.jsp").include(request, response);
         
         List<Users> userList = usersFacade.findAllMinistry();
+        // search value
+//        String search = request.getParameter("search");
+//        if (search != null) {
+//            userList = usersFacade.findAllMinistry();
+//        } else {
+//            userList = usersFacade.findAllMinistry();
+//        }
         
         HttpSession s = request.getSession(false);
         Users user = (Users)s.getAttribute("login");
         s.setAttribute("userList", userList);
         
         try (PrintWriter out = response.getWriter()) {
+            // title
             out.println("<br><br>Ministry Staff Infomation");
+            
+//            // search
+//            out.print("<br><br><form action=\"MinistryManage\">\n"+ 
+//            "    Username:<input type=\"text\" name=\"search\" size=\"20\">" +
+//            "    <br><input type=\"submit\" value=\"Search\" />\n" +
+//            "</form>");
 
             //print tables header
             out.println("<br><br><table>\n" +
@@ -63,8 +77,8 @@ public class MinistryManage extends HttpServlet {
                 "    <th>Delete</th>\n" +
                 "  </tr>");
             
+            //print tables row
             for (int i = 0; i < userList.size(); i++) {
-                //print tables row
                 out.print("  <tr>\n" +
                     "    <td>"+userList.get(i).getName()+"</td>\n" +
                     "    <td>"+userList.get(i).getGender()+"</td>\n" +
