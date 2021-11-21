@@ -13,7 +13,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import model.Users;
 import model.UsersFacade;
 
@@ -43,39 +42,66 @@ public class EditProfile extends HttpServlet {
         Long id = Long.parseLong(request.getParameter("id"));
         Users user = usersFacade.find(id);
         
+        String backPage = request.getParameter("backPage");
+        String i = request.getParameter("i");
+        
         String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        String name = request.getParameter("name");
-        String phone = request.getParameter("phone");
-        String email = request.getParameter("email");
         
-        if (user.getUserType() != 1) {
-            // for ministry and public user
-            String gender = request.getParameter("gender");
-            String ic = request.getParameter("ic");
-            user.setGender(gender);
-            user.setIc(ic);
-        }
+        // if username not exist and if username not change 
         
-        user.setUsername(username);
-        user.setPassword(password);
-        user.setName(name);
-        user.setPhone(phone);
-        user.setEmail(email);
+        
+        if (
+                user.getUsername().equals(username) || (
+                    !user.getUsername().equals("admin") || (    
+                        !username.equals("admin") || !(usersFacade.findUser(username) == null)
+                    )
+                )
+        ) {
+            String password = request.getParameter("password");
+            String name = request.getParameter("name");
+            String phone = request.getParameter("phone");
+            String email = request.getParameter("email");
+            String address = request.getParameter("address");
 
-        usersFacade.edit(user);
-        
-        try (PrintWriter out = response.getWriter()) {
-            switch (user.getUserType()) {
-                case 0:
-                    request.getRequestDispatcher("MinistryHome").include(request, response);
-                    break;
-                case 1:
-                    request.getRequestDispatcher("clinicHome.jsp").include(request, response);
-                    break;
-                case 2:
-                    request.getRequestDispatcher("publicUserHome.jsp").include(request, response);
-                    break;
+            if (user.getUserType() != 1) {
+                // for ministry and public user
+                String gender = request.getParameter("gender");
+                String ic = request.getParameter("ic");
+                user.setGender(gender);
+                user.setIc(ic);
+            }
+
+            user.setUsername(username);
+            user.setPassword(password);
+            user.setName(name);
+            user.setPhone(phone);
+            user.setEmail(email);
+            user.setAddress(address);
+
+            usersFacade.edit(user);
+            
+            request.getRequestDispatcher(backPage).include(request, response);
+            
+        } else {
+            
+            try (PrintWriter out = response.getWriter()) {
+                String output;
+                String page = "editProfile.jsp";
+                if (user.getUsername().equals("admin")) {
+                    output = "<br><br>admin cannot change username.";
+                }                 
+                else if (username.equals("admin")) {
+                    output = "<br><br>cannot change username to admin.";
+                } else {
+                    output = "<br><br>Username '"+ username +"' has been used.";
+                }
+                
+                if (i != null) {
+                    page = "editProfile.jsp?i="+i+"&from="+backPage;
+                }
+                
+                request.getRequestDispatcher(page).include(request, response);   
+                out.println(output);
             }
         }
     }

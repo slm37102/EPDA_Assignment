@@ -54,4 +54,22 @@ public class UsersFacade extends AbstractFacade<Users> {
         Query q = em.createNamedQuery("Users.findAllPublicUser");
         return q.getResultList();
     }
+    
+    public List<Users> findFilteredMinistry(String search){
+        Query q = em.createNamedQuery("Users.findFilteredMinistry");
+        q.setParameter("a", "%"+search+"%");
+        return q.getResultList();
+    }
+    
+    public List<Users> findFilteredClinic(String search){
+        Query q = em.createNamedQuery("Users.findFilteredClinic");
+        q.setParameter("a", "%"+search+"%");
+        return q.getResultList();
+    }
+    
+    public List<Users> findFilteredPublicUser(String search){
+        Query q = em.createNamedQuery("Users.findFilteredPublicUser");
+        q.setParameter("a", "%"+search+"%");
+        return q.getResultList();
+    }
 }

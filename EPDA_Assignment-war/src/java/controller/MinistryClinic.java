@@ -52,9 +52,11 @@ public class MinistryClinic extends HttpServlet {
             //print tables header
             out.println("<br><br><table>\n" +
                 "  <tr>\n" +
+                "    <th>Username</th>\n" +
                 "    <th>Name</th>\n" +
                 "    <th>Phone Number</th>\n" +
                 "    <th>Email</th>\n" +
+                "    <th>Address</th>\n" +
                 "    <th>Edit</th>\n" +
                 "    <th>Delete</th>\n" +
                 "  </tr>");
@@ -62,9 +64,11 @@ public class MinistryClinic extends HttpServlet {
             for (int i = 0; i < userList.size(); i++) {
                 //print tables row
                 out.print("  <tr>\n" +
+                    "    <td>"+userList.get(i).getUsername()+"</td>\n" +
                     "    <td>"+userList.get(i).getName()+"</td>\n" +
                     "    <td>"+userList.get(i).getPhone()+"</td>\n" +
                     "    <td>"+userList.get(i).getEmail()+"</td>\n" +
+                    "    <td>"+userList.get(i).getAddress()+"</td>\n" +
                     "    <td><a href=\"editProfile.jsp?i="+i+"&from=MinistryClinic\">Edit</a> |</td>\n" +
                     "    <td><a href=\"UserDelete?id="+userList.get(i).getId()+"&from=MinistryClinic\">Delete</a> |</td>\n" +
                     "  </tr>");

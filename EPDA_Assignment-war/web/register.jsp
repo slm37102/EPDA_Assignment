@@ -29,7 +29,7 @@
             // TODO: change Clinic to not show gender and ic
             boolean isCheck = false;
         --%>
-        <form action="Register" method="POST">
+        <form action="Register?backPage=${backPage}" method="POST">
             <table>
                 <%
                     // if not login yet
@@ -83,6 +83,10 @@
                 <tr>
                     <td>Email Address:</td>
                     <td><input type="email" name="email" size="20" required></td>
+                </tr>
+                <tr>
+                    <td>Address:</td>
+                    <td><input type="text" name="address" size="20" required></td>
                 </tr>
             </table>
             <p><input type="submit" value="Register"></p>

@@ -20,7 +20,7 @@ import javax.persistence.NamedQuery;
 @Entity
 @NamedQueries({
     @NamedQuery(name = "Users.findUser",
-            query = "SELECT x FROM Users x WHERE x.name = :a"), 
+            query = "SELECT x FROM Users x WHERE x.username = :a"), 
     
     @NamedQuery(name = "Users.findAllMinistry",
             query = "SELECT x FROM Users x WHERE x.userType = 0"), 
@@ -29,7 +29,16 @@ import javax.persistence.NamedQuery;
             query = "SELECT x FROM Users x WHERE x.userType = 1"), 
     
     @NamedQuery(name = "Users.findAllPublicUser",
-            query = "SELECT x FROM Users x WHERE x.userType = 2")
+            query = "SELECT x FROM Users x WHERE x.userType = 2"), 
+    
+    @NamedQuery(name = "Users.findFilteredMinistry",
+            query = "SELECT x FROM Users x WHERE (x.userType = 0) AND (x.username LIKE :a OR x.name LIKE :a OR x.phone LIKE :a OR x.ic LIKE :a OR x.email LIKE :a OR x.address LIKE :a)"), 
+    
+    @NamedQuery(name = "Users.findFilteredClinic",
+            query = "SELECT x FROM Users x WHERE (x.userType = 1) AND (x.username LIKE :a OR x.name LIKE :a OR x.phone LIKE :a OR x.email LIKE :a OR x.address LIKE :a)"), 
+    
+    @NamedQuery(name = "Users.findFilteredPublicUser",
+            query = "SELECT x FROM Users x WHERE (x.userType = 2) AND (x.username LIKE :a OR x.name LIKE :a OR x.phone LIKE :a OR x.ic LIKE :a OR x.email LIKE :a OR x.address LIKE :a)")
 })
 public class Users implements Serializable {
 
@@ -47,8 +56,9 @@ public class Users implements Serializable {
     private String phone;
     private String ic;
     private String email;
+    private String address;
 
-    public Users(int userType, String username, String password, String name, String gender, String phone, String ic, String email) {
+    public Users(int userType, String username, String password, String name, String gender, String phone, String ic, String email, String address) {
         this.userType = userType;
         this.username = username;
         this.password = password;
@@ -57,15 +67,17 @@ public class Users implements Serializable {
         this.phone = phone;
         this.ic = ic;
         this.email = email;
+        this.address = address;
     }
 
-    public Users(int userType, String username, String password, String name, String phone, String email) {
+    public Users(int userType, String username, String password, String name, String phone, String email, String address) {
         this.userType = userType;
         this.username = username;
         this.password = password;
         this.name = name;
         this.phone = phone;
         this.email = email;
+        this.address = address;
     }
     
     public Users() {
@@ -141,6 +153,14 @@ public class Users implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
     
     @Override

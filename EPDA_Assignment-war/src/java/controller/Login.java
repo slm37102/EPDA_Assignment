@@ -45,24 +45,12 @@ public class Login extends HttpServlet {
         String password = request.getParameter("password");
         
         // search for user 
-        // can change to other popega method 
-        Users user = null;
-        List<Users> userList = userFacade.findAll();
-        for (int i = 0; i < userList.size(); i++) {
-            if (userList.get(i).getUsername().equals(username)) {
-                user = userList.get(i);
-                break;
-            }
-        }
-        if (username.equals("admin") && password.equals("admin")) {
-            //if no admin in table add admin
-            if (user == null) {
-                user = new Users(0, "admin", "admin", "-", "-", "-", "-", "-");
+        Users user = userFacade.findUser(username);
+        
+        //if first time admin login
+        if (username.equals("admin") && user == null && password.equals("admin")) {
+                user = new Users(0, "admin", "admin", "-", "-", "-", "-", "-", "-");
                 userFacade.create(user);
-            }
-            request.getRequestDispatcher("/MinistryHome").forward(request, response);
-            HttpSession s = request.getSession();
-            s.setAttribute("login", user);
         }
         
         try (PrintWriter out = response.getWriter()) {    

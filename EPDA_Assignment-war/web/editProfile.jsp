@@ -24,6 +24,7 @@
             // if is edited by Ministry
             if (backPage != null) {
                 int i = Integer.parseInt(request.getParameter("i"));
+                request.setAttribute("i", "&i="+i);
                 user = ((List<Users>)s.getAttribute("userList")).get(i);
                 if (user.getUserType() == 1) {
                     notClinic = false;
@@ -52,12 +53,13 @@
             request.setAttribute("name", user.getName());
             request.setAttribute("phone", user.getPhone());
             request.setAttribute("email", user.getEmail());            
+            request.setAttribute("address", user.getAddress());            
             request.setAttribute("backPage",backPage);
             request.setAttribute("notClinic",notClinic);
         %>
         <a href=${backPage}>Back</a>
         <br><br>
-        <form action="EditProfile?id=${id}" method="POST">
+        <form action="EditProfile?id=${id}&backPage=${backPage}${i}" method="POST">
             <table>                
                 <tr>
                     <td>Username:</td>
@@ -107,6 +109,10 @@
                 <tr>
                     <td>Email Address:</td>
                     <td><input type="email" name="email" size="20" value="${email}" required></td>
+                </tr>
+                <tr>
+                    <td>Address:</td>
+                    <td><input type="text" name="address" size="20" value="${address}" required></td>
                 </tr>
             </table>
             <p><input type="submit" value="Edit"></p>

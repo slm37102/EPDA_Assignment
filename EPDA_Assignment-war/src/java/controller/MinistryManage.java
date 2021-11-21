@@ -43,14 +43,18 @@ public class MinistryManage extends HttpServlet {
         
         request.getRequestDispatcher("ministryBanner.jsp").include(request, response);
         
-        List<Users> userList = usersFacade.findAllMinistry();
+        List<Users> userList;
         // search value
-//        String search = request.getParameter("search");
-//        if (search != null) {
-//            userList = usersFacade.findAllMinistry();
-//        } else {
-//            userList = usersFacade.findAllMinistry();
-//        }
+        String search = request.getParameter("search");
+        if (search != null) {
+            if (!search.equals("")) {
+                userList = usersFacade.findFilteredMinistry(search);
+            } else {
+                userList = usersFacade.findAllMinistry();
+            }
+        } else {
+            userList = usersFacade.findAllMinistry();
+        }
         
         HttpSession s = request.getSession(false);
         Users user = (Users)s.getAttribute("login");
@@ -60,19 +64,21 @@ public class MinistryManage extends HttpServlet {
             // title
             out.println("<br><br>Ministry Staff Infomation");
             
-//            // search
-//            out.print("<br><br><form action=\"MinistryManage\">\n"+ 
-//            "    Username:<input type=\"text\" name=\"search\" size=\"20\">" +
-//            "    <br><input type=\"submit\" value=\"Search\" />\n" +
-//            "</form>");
+            // search
+            out.print("<br><br><form action=\"MinistryManage\">\n"+ 
+            "    Search:<input type=\"text\" name=\"search\" size=\"20\">" +
+            "    <input type=\"submit\" value=\"Search\" />\n" +
+            "</form>");
 
             //print tables header
-            out.println("<br><br><table>\n" +
+            out.println("<br><table>\n" +
                 "  <tr>\n" +
+                "    <th>Username</th>\n" +
                 "    <th>Name</th>\n" +
                 "    <th>Gender</th>\n" +
                 "    <th>Phone Number</th>\n" +
                 "    <th>Email</th>\n" +
+                "    <th>Address</th>\n" +
                 "    <th>Edit</th>\n" +
                 "    <th>Delete</th>\n" +
                 "  </tr>");
@@ -80,10 +86,12 @@ public class MinistryManage extends HttpServlet {
             //print tables row
             for (int i = 0; i < userList.size(); i++) {
                 out.print("  <tr>\n" +
+                    "    <td>"+userList.get(i).getUsername()+"</td>\n" +
                     "    <td>"+userList.get(i).getName()+"</td>\n" +
                     "    <td>"+userList.get(i).getGender()+"</td>\n" +
                     "    <td>"+userList.get(i).getPhone()+"</td>\n" +
-                    "    <td>"+userList.get(i).getEmail()+"</td>\n");
+                    "    <td>"+userList.get(i).getEmail()+"</td>\n" +
+                    "    <td>"+userList.get(i).getAddress()+"</td>\n");
                 
                 // if delete current user in table
                 if (user != userList.get(i)) {

@@ -41,32 +41,36 @@ public class Register extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         
+        String backPage = request.getParameter("backPage");
+        
         String userType = request.getParameter("userType");
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         String name = request.getParameter("name");
         String phone = request.getParameter("phone");
         String email = request.getParameter("email");
+        String address = request.getParameter("address");
         
         Users newUser = null;
         
+        // if username not exist
         if (usersFacade.findUser(username) == null) {
             HttpSession s = request.getSession(false);
             // for ministry staff (only login able to access)
             if (s.getAttribute("login") != null) {
                 String gender = request.getParameter("gender");
                 String ic = request.getParameter("ic");
-                newUser = new Users(0, username, password, name, gender, ic, phone, email);
+                newUser = new Users(0, username, password, name, gender, ic, phone, email, address);
             } 
             // for clinic staff
             else if (userType.equals("Clinic")) {       
-                newUser = new Users(1, username, password, name, phone, email);
+                newUser = new Users(1, username, password, name, phone, email, address);
             }
             // for public user
             else if (userType.equals("Public User")) {
                 String gender = request.getParameter("gender");
                 String ic = request.getParameter("ic");
-                newUser = new Users(2, username, password, name, gender, ic, phone, email);
+                newUser = new Users(2, username, password, name, gender, ic, phone, email, address);
             }
 
             usersFacade.create(newUser);
@@ -75,9 +79,9 @@ public class Register extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             if (newUser == null) {
                 request.getRequestDispatcher("register.jsp").include(request, response);
-                out.println("<br><br>Username "+ username +" has been used");
+                out.println("<br><br>Username '"+ username +"' has been used");
             } else {
-                request.getRequestDispatcher("login.jsp").include(request, response);
+                request.getRequestDispatcher(backPage).include(request, response);
                 out.println("<br><br>Thank you "+name+", registration is done!");
             }
         }
