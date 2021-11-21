@@ -36,8 +36,7 @@ public class Appointment implements Serializable {
     private Long clinicId;
     private Date appointDate;
     private int numDose;
-    // not respond = 0, accept = 1, reject =-1 
-    private int accepted;
+    private int accepted; // pending = 0, accept = 1, reject =-1 
     private boolean finishVac;
 
     public Appointment(Long userId, Long clinicId, Date appointDate, int numDose) {
@@ -45,7 +44,7 @@ public class Appointment implements Serializable {
         this.clinicId = clinicId;
         this.appointDate = appointDate;
         this.numDose = numDose;
-        // accepted save as null
+        this.accepted = 0;
         this.finishVac = false;
     }
 

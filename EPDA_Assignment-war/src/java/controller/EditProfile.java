@@ -51,12 +51,13 @@ public class EditProfile extends HttpServlet {
         
         
         if (
-                user.getUsername().equals(username) || (
-                    !user.getUsername().equals("admin") || (    
-                        !username.equals("admin") || !(usersFacade.findUser(username) == null)
-                    )
+                user.getUsername().equals(username) || // user not changing username
+                !(
+                    user.getUsername().equals("admin") // admin change its username 
+                    || username.equals("admin") // user change to admin
+                    || (usersFacade.findUser(username) != null) // exist in database
                 )
-        ) {
+            ) {
             String password = request.getParameter("password");
             String name = request.getParameter("name");
             String phone = request.getParameter("phone");

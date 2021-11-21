@@ -16,7 +16,7 @@
         <a href="MinistryManage">Ministry</a> | 
         <a href="MinistryClinic">Clinic</a> | 
         <a href="MinistryPublicUser">Public User</a> | 
-        <a href="">Report</a> | 
+        <a href="Report">Report</a> | 
         <a href="editProfile.jsp">Edit Profile User</a> | 
         <a href="Logout">Logout</a>
     </body>

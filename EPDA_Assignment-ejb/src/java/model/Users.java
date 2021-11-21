@@ -58,7 +58,7 @@ public class Users implements Serializable {
     private String email;
     private String address;
 
-    public Users(int userType, String username, String password, String name, String gender, String phone, String ic, String email, String address) {
+    public Users(int userType, String username, String password, String name, String gender, String ic, String phone, String email, String address) {
         this.userType = userType;
         this.username = username;
         this.password = password;
