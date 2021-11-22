@@ -6,13 +6,15 @@
 package controller;
 
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import model.Appointment;
+import model.AppointmentFacade;
 import model.Users;
 import model.UsersFacade;
 
@@ -22,6 +24,10 @@ import model.UsersFacade;
  */
 @WebServlet(name = "UserDelete", urlPatterns = {"/UserDelete"})
 public class UserDelete extends HttpServlet {
+
+    @EJB
+    private AppointmentFacade appointmentFacade;
+    
     @EJB
     private UsersFacade usersFacade;
 
@@ -45,7 +51,22 @@ public class UserDelete extends HttpServlet {
         if (user.getUsername().equals("admin")) {
             // admin user cannot be deleted
             request.getRequestDispatcher("/"+from+"?admin=true").include(request, response);
-        } else {
+            
+        } else {            
+            // delete appointment for the user
+            if (user.getUserType() == 1) {
+                List<Appointment> appointmentList = appointmentFacade.findAllFromClinic(id);
+                for (int i = 0; i < appointmentList.size(); i++) {
+                    appointmentFacade.remove(appointmentList.get(i));
+                }
+            } else if (user.getUserType() == 2) {
+                List<Appointment> appointmentList = appointmentFacade.findAllFromPublicUser(id);
+                for (int i = 0; i < appointmentList.size(); i++) {
+                    appointmentFacade.remove(appointmentList.get(i));
+                }
+            }
+            
+            // delete the user
             usersFacade.remove(user);
             request.getRequestDispatcher("/"+from+"?deletedName="+user.getName()).include(request, response);
         }

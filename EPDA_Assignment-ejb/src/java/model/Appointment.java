@@ -21,10 +21,13 @@ import javax.persistence.NamedQuery;
 @Entity
 @NamedQueries({    
     @NamedQuery(name = "Appointment.findAllClinic",
-            query = "SELECT x FROM Appointment x WHERE x.clinicId = :a"), 
+            query = "SELECT x FROM Appointment x WHERE x.clinicId = :a ORDER BY x.appointDate"), 
     
     @NamedQuery(name = "Appointment.findAllPublicUser",
-            query = "SELECT x FROM Appointment x WHERE x.userId = :a")
+            query = "SELECT x FROM Appointment x WHERE x.userId = :a ORDER BY x.appointDate"), 
+    
+    @NamedQuery(name = "Appointment.findAllSorted",
+            query = "SELECT x FROM Appointment x ORDER BY x.appointDate")
 })
 public class Appointment implements Serializable {
 

@@ -100,7 +100,7 @@
                 </tr>
                 <tr id="icRow">
                     <td>IC no.:</td>
-                    <td><input type="text" name="ic" size="20" required></td>
+                    <td><input type="text" name="ic" size="20"></td>
                 </tr>
                 <tr>
                     <td>Phone number:</td>

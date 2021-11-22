@@ -41,4 +41,10 @@ public class AppointmentFacade extends AbstractFacade<Appointment> {
         q.setParameter("a", userId);
         return q.getResultList();
     }
+    
+    @Override
+    public List<Appointment> findAll(){
+        Query q = em.createNamedQuery("Appointment.findAllSorted");
+        return q.getResultList();
+    }
 }

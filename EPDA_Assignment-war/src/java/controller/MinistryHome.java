@@ -69,6 +69,20 @@ public class MinistryHome extends HttpServlet {
                     // convert date format to date and time
                     String stringDate = new SimpleDateFormat("yyyy-MM-dd").format(appointmentList.get(i).getAppointDate());
                     String stringTime = new SimpleDateFormat("HH:mm").format(appointmentList.get(i).getAppointDate());
+                    
+                    String status;
+                    switch (appointmentList.get(i).isAccepted()) {
+                        case 1:
+                            status = "Accepted";
+                            break;
+                        case -1:
+                            status = "Rejected";
+                            break;
+                        default:
+                            status = "Pending";
+                            break;
+                    }
+                    
                     //print tables row
                     out.print("  <tr>\n" +
                         "    <td>"+appointmentList.get(i).getId()+"</td>\n" +
@@ -77,8 +91,8 @@ public class MinistryHome extends HttpServlet {
                         "    <td>"+stringDate+"</td>\n" +
                         "    <td>"+stringTime+"</td>\n" +
                         "    <td>"+appointmentList.get(i).getNumDose()+"</td>\n" +
-                        "    <td>"+appointmentList.get(i).isAccepted()+"</td>\n" +
-                        "    <td>"+appointmentList.get(i).isFinishVac()+"</td>\n" +
+                        "    <td>"+status+"</td>\n" +
+                        "    <td>"+(appointmentList.get(i).isFinishVac()?"Yes":"No")+"</td>\n" +
                     "    <td><a href=\"appointmentEdit.jsp?i="+i+"\">Edit</a> |</td>\n" +
                     "    <td><a href=\"AppointmentDelete?id="+appointmentList.get(i).getId()+"\">Delete</a> |</td>\n" +
                         "  </tr>");
