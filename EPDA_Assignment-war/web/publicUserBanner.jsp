@@ -12,7 +12,7 @@
         <title>Public User Home Page</title>
     </head>
     <body>
-        <a href="publicUserHome.jsp">Home</a> | 
+        <a href="PublicUserHome">Home</a> | 
         <a href="editProfile.jsp">Edit Profile</a> | 
         <a href="Logout">Logout</a>
     </body>

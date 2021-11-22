@@ -41,8 +41,14 @@ public class UserDelete extends HttpServlet {
         Long id = Long.parseLong(request.getParameter("id"));
         String from = request.getParameter("from");
         Users user = usersFacade.find(id);
-        usersFacade.remove(user);
-        request.getRequestDispatcher("/"+from+"?deletedName="+user.getName()).include(request, response);
+        
+        if (user.getUsername().equals("admin")) {
+            // admin user cannot be deleted
+            request.getRequestDispatcher("/"+from+"?admin=true").include(request, response);
+        } else {
+            usersFacade.remove(user);
+            request.getRequestDispatcher("/"+from+"?deletedName="+user.getName()).include(request, response);
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

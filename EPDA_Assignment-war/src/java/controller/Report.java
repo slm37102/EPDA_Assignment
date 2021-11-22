@@ -7,6 +7,8 @@ package controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Dictionary;
+import java.util.Hashtable;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -54,10 +56,10 @@ public class Report extends HttpServlet {
             }
         }
         total = male + female;
-        male = male * 100 / total;
-        female = female * 100 / total;
+        male = Math.round(male * 100 / total);
+        female = Math.round(female * 100 / total);
         
-        
+        Dictionary geek = new Hashtable();
         
         try (PrintWriter out = response.getWriter()) {
             

@@ -112,6 +112,9 @@ public class MinistryManage extends HttpServlet {
             if (request.getParameter("deletedName") != null) {
                 out.print("<br>User "+ request.getParameter("deletedName") +" has been deleted.");
             }
+            if (request.getParameter("admin") != null) {
+                out.print("<br>admin user cannot be deleted.");
+            }
         }
     }
 

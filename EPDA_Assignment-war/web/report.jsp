@@ -10,7 +10,7 @@
 <%@ page import="com.google.gson.JsonObject"%>
  
 <%
-    
+    request.getParameter("");
     Gson gsonObj = new Gson();
     Map<Object,Object> map = null;
     List<Map<Object,Object>> list = new ArrayList<Map<Object,Object>>();
