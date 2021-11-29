@@ -47,10 +47,10 @@ public class MinistryHome extends HttpServlet {
         s.setAttribute("appointmentList", appointmentList);
         
         try (PrintWriter out = response.getWriter()) {
+            out.println("<h1 style=\"font-size:30px;\">Ministry Home Page</h1>");
+            request.getRequestDispatcher("ministryBanner.jsp").include(request, response);
             // if has appointment
             if (appointmentList.size() > 0) {
-                out.println("<h1 style=\"font-size:30px;\">Ministry Home Page</h1>");
-                request.getRequestDispatcher("ministryBanner.jsp").include(request, response);
                 out.println("<br><br><table class=\"blueTable\">\n" +
                 "  <tr>\n" +
                 "    <th>Appointment ID</th>\n" +

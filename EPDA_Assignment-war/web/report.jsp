@@ -136,7 +136,7 @@ window.onload = function() {
         ]
       }],
       title: {
-        text: "test",
+        text: "Number of dose taken per day",
       },
         xaxis: {
           type: "datetime",
