@@ -12,8 +12,7 @@
         <title>Login Page</title>
     </head>
     <body>
-        <a href="register.jsp">Register</a>
-        <br><br>
+        <h1 style="font-size:30px;">Login Page</h1>
         <form action="Login" method="POST">
             <table>
                 <tr>
@@ -25,6 +24,7 @@
                     <td><input type="password" name="password" size="20" required></td>
                 </tr>
             </table>
+            <a href="register.jsp">Register</a>
             <p><input type="submit" value="Login"></p>
         </form>
     </body>

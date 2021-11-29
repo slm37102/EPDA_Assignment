@@ -57,8 +57,8 @@
             request.setAttribute("backPage",backPage);
             request.setAttribute("notClinic",notClinic);
         %>
-        <a href=${backPage}>Back</a>
-        <br><br>
+        <a href=${backPage}>Back</a><br>
+        <h1 style="font-size:30px;">Edit Profile</h1>
         <form action="EditProfile?id=${id}&backPage=${backPage}${i}" method="POST">
             <table>                
                 <tr>

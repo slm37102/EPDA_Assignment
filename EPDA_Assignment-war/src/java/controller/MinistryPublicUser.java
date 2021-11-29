@@ -40,18 +40,18 @@ public class MinistryPublicUser extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         
-        request.getRequestDispatcher("ministryBanner.jsp").include(request, response);
-        
         List<Users> userList = usersFacade.findAllPublicUser();
         
         HttpSession s = request.getSession(false);
         s.setAttribute("userList", userList);
         
         try (PrintWriter out = response.getWriter()) {
-            out.println("<br><br>Public User Infomation");
-
+            out.println("<h1 style=\"font-size:30px;\">Public User Infomation</h1>");
+            
+            request.getRequestDispatcher("ministryBanner.jsp").include(request, response);
+            
             //print tables header
-            out.println("<br><br><table>\n" +
+            out.println("<br><br><table class=\"blueTable\">\n" +
                 "  <tr>\n" +
                 "    <th>Username</th>\n" +
                 "    <th>Name</th>\n" +

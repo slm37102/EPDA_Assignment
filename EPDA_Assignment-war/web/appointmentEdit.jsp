@@ -16,7 +16,9 @@
     </head>
     <body>
         <a href="MinistryHome">Back</a>
-        <br><br>
+        <br>
+        <h1 style="font-size:30px;">Appointment Edit Page</h1>
+        <br>
         <%
             HttpSession s = request.getSession(false);                       
             int i = Integer.parseInt(request.getParameter("i"));

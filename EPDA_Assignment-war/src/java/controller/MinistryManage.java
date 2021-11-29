@@ -41,8 +41,6 @@ public class MinistryManage extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         
-        request.getRequestDispatcher("ministryBanner.jsp").include(request, response);
-        
         List<Users> userList;
         // search value
         String search = request.getParameter("search");
@@ -62,8 +60,10 @@ public class MinistryManage extends HttpServlet {
         
         try (PrintWriter out = response.getWriter()) {
             // title
-            out.println("<br><br>Ministry Staff Infomation");
+            out.println("<h1 style=\"font-size:30px;\">Ministry Staff Infomation</h1>");
             
+            request.getRequestDispatcher("ministryBanner.jsp").include(request, response);
+
             // search
             out.print("<br><br><form action=\"MinistryManage\">\n"+ 
             "    Search:<input type=\"text\" name=\"search\" size=\"20\">" +
@@ -71,7 +71,7 @@ public class MinistryManage extends HttpServlet {
             "</form>");
 
             //print tables header
-            out.println("<br><table>\n" +
+            out.println("<br><table class=\"blueTable\">\n" +
                 "  <tr>\n" +
                 "    <th>Username</th>\n" +
                 "    <th>Name</th>\n" +

@@ -41,8 +41,6 @@ public class MinistryHome extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         
-        request.getRequestDispatcher("ministryBanner.jsp").include(request, response);
-        
         List<Appointment> appointmentList = appointmentFacade.findAll();
         
         HttpSession s = request.getSession(false);
@@ -51,7 +49,9 @@ public class MinistryHome extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             // if has appointment
             if (appointmentList.size() > 0) {
-                out.println("<br><br><table>\n" +
+                out.println("<h1 style=\"font-size:30px;\">Ministry Home Page</h1>");
+                request.getRequestDispatcher("ministryBanner.jsp").include(request, response);
+                out.println("<br><br><table class=\"blueTable\">\n" +
                 "  <tr>\n" +
                 "    <th>Appointment ID</th>\n" +
                 "    <th>Public User</th>\n" +

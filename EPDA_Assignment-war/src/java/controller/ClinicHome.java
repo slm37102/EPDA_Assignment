@@ -42,7 +42,6 @@ public class ClinicHome extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        request.getRequestDispatcher("clinicBanner.jsp").include(request, response);
         
         HttpSession s = request.getSession(false);
         Users user = (Users)s.getAttribute("login");
@@ -52,7 +51,11 @@ public class ClinicHome extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             // if has appointment
             if (appointmentList.size() > 0) {
-                out.println("<br><br><table>\n" +
+                out.println("<h1 style=\"font-size:30px;\">Clinic Home Page</h1>");
+                
+                request.getRequestDispatcher("clinicBanner.jsp").include(request, response);
+
+                out.println("<br><br><table class=\"blueTable\">\n" +
                 "  <tr>\n" +
                 "    <th>Appointment ID</th>\n" +
                 "    <th>Public User</th>\n" +

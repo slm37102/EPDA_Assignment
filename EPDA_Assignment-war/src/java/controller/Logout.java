@@ -41,7 +41,7 @@ public class Logout extends HttpServlet {
         
         try (PrintWriter out = response.getWriter()) {
             request.getRequestDispatcher("login.jsp").include(request, response);
-            out.println("<br><br>Thank you "+user.getName()+", See you again soon!");
+            out.println("<br>Thank you "+user.getName()+", See you again soon!");
         }
     }
 

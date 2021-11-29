@@ -128,8 +128,9 @@ public class Report extends HttpServlet {
         s.setAttribute("vacStatus", vacStatus);
         
         try (PrintWriter out = response.getWriter()) {  
+            out.print("<h1 style=\"font-size:30px;\">Report</h1>");
             request.getRequestDispatcher("ministryBanner.jsp").include(request, response);
-            out.print("<br><br>Report<br><br>");
+            out.print("<br>");
             request.getRequestDispatcher("report.jsp").include(request, response);
 //            out.print(account.keySet());
 //            out.print(account.values());

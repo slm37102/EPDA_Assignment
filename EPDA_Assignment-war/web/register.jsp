@@ -38,8 +38,8 @@
                 request.setAttribute("backPage","MinistryManage");
             }
         %>
-        <a href="${backPage}">Back</a>
-        <br><br>
+        <a href="${backPage}">Back</a><br>
+        <h1 style="font-size:30px;">Register Page</h1>
         <%--
             // TODO: change Clinic to not show gender and ic
             boolean isCheck = false;

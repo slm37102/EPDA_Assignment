@@ -27,8 +27,6 @@
 <script type="text/javascript">
 window.onload = function() { 
     
-          
-    
     var options1 = {
       chart: {
         type: 'bar'
@@ -42,7 +40,7 @@ window.onload = function() {
         ]
       }],
       title: {
-        text: "test",
+        text: "Bar chart of the Distribution of Accounts",
       },
       xaxis: {
         categories: [
@@ -51,12 +49,12 @@ window.onload = function() {
             </c:forEach>
         ],
          title: {
-          text: "undefined"
+          text: "Types of Account"
         }
       },
       yaxis: {
         title: {
-          text: "undefined"
+          text: "Number of Accounts"
         }
       }
     };
@@ -66,7 +64,7 @@ window.onload = function() {
         type: 'bar'
       },
       series: [{
-        name: 'sales',
+        name: 'Number of Public User',
         data: [
             <c:forEach items="${gender.values()}" var="i" varStatus="status">  
                 ${i}<c:if test="${!status.last}">,</c:if>   
@@ -79,16 +77,16 @@ window.onload = function() {
             </c:forEach>
         ],
       title: {
-        text: "test",
+        text: "Bar chart of Distribution of Public User's gender",
       },
       xaxis: {
          title: {
-          text: "undefined"
+          text: "Gender"
         }
       },
       yaxis: {
         title: {
-          text: "undefined"
+          text: "Number of Public User"
         }
        }
     };
@@ -106,7 +104,7 @@ window.onload = function() {
         ]
       }],
       title: {
-        text: "test",
+        text: "Bar chart of distribution of each dose",
       },
       xaxis: {
         categories: [
@@ -115,12 +113,12 @@ window.onload = function() {
             </c:forEach>
         ],
         title: {
-          text: "undefined"
+          text: "Dose"
         }
       },
       yaxis: {
         title: {
-          text: "undefined"
+          text: "Number of people taken dose"
         }
        }
       
@@ -130,7 +128,7 @@ window.onload = function() {
         type: 'line'
       },
       series: [{
-        name: 'Prople Vaccined',
+        name: 'People Vaccined',
         data: [
             <c:forEach items="${vacPerDay.keySet()}" var="i" varStatus="status">
                 { x: '${i}', y:${vacPerDay.get(i)} }<c:if test="${!status.last}">,</c:if>   
@@ -143,12 +141,12 @@ window.onload = function() {
         xaxis: {
           type: "datetime",
           title: {
-            text: "undefined"
+            text: "Date"
           }
         },
       yaxis: {
         title: {
-          text: "undefined"
+          text: "Number of dose taken"
         }
        }
     };
@@ -165,7 +163,7 @@ window.onload = function() {
         ]
       }],
       title: {
-        text: "test",
+        text: "Bar chart of Vaccine Status",
       },
       xaxis: {
         categories: [
@@ -174,12 +172,12 @@ window.onload = function() {
             </c:forEach>
         ],
         title: {
-          text: "undefined"
+          text: "Vaccine Status"
         }
       },
       yaxis: {
         title: {
-          text: "undefined"
+          text: "Number of people"
         }
        }
     };
@@ -199,11 +197,11 @@ window.onload = function() {
 </script>
 </head>
 <body>
-    <div id="chart1" style="height: 370px; width: 50%; margin:0 auto;" ></div>
-    <div id="chart2" style="height: 370px; width: 50%; margin:0 auto;"></div>
-    <div id="chart3" style="height: 370px; width: 50%; margin:0 auto;"></div>
-    <div id="chart4" style="height: 370px; width: 50%; margin:0 auto;"></div>
-    <div id="chart5" style="height: 370px; width: 50%; margin:0 auto;"></div>
+    <div id="chart1" style="height: 370px; width: 70%; margin:0 auto;" ></div>
+    <div id="chart2" style="height: 370px; width: 70%; margin:0 auto;"></div>
+    <div id="chart3" style="height: 370px; width: 70%; margin:0 auto;"></div>
+    <div id="chart4" style="height: 370px; width: 70%; margin:0 auto;"></div>
+    <div id="chart5" style="height: 370px; width: 70%; margin:0 auto;"></div>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 </body>
 </html>           
