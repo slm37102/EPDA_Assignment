@@ -50,12 +50,11 @@ public class PublicUserHome extends HttpServlet {
         List<Appointment> appointmentList = appointmentFacade.findAllFromPublicUser(user.getId());
         
         try (PrintWriter out = response.getWriter()) {
+            out.println("<h1 style=\"font-size:30px;\">Public User Home Page</h1>");
+            request.getRequestDispatcher("publicUserBanner.jsp").include(request, response);
+            
             // if has appointment
             if (appointmentList.size() > 0) {
-                out.println("<h1 style=\"font-size:30px;\">Public User Home Page</h1>");
-                
-                request.getRequestDispatcher("publicUserBanner.jsp").include(request, response);
-                
                 out.println("<br><br><table class=\"blueTable\">\n" +
                 "  <tr>\n" +
                 "    <th>Appointment ID</th>\n" +

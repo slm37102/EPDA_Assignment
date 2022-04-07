@@ -69,13 +69,14 @@ public class MinistryManage extends HttpServlet {
             "    Search:<input type=\"text\" name=\"search\" size=\"20\">" +
             "    <input type=\"submit\" value=\"Search\" />\n" +
             "</form>");
-
+            
             //print tables header
             out.println("<br><table class=\"blueTable\">\n" +
                 "  <tr>\n" +
                 "    <th>Username</th>\n" +
                 "    <th>Name</th>\n" +
                 "    <th>Gender</th>\n" +
+                "    <th>IC Number</th>\n" +
                 "    <th>Phone Number</th>\n" +
                 "    <th>Email</th>\n" +
                 "    <th>Address</th>\n" +
@@ -89,6 +90,7 @@ public class MinistryManage extends HttpServlet {
                     "    <td>"+userList.get(i).getUsername()+"</td>\n" +
                     "    <td>"+userList.get(i).getName()+"</td>\n" +
                     "    <td>"+userList.get(i).getGender()+"</td>\n" +
+                    "    <td>"+userList.get(i).getIc()+"</td>\n" +
                     "    <td>"+userList.get(i).getPhone()+"</td>\n" +
                     "    <td>"+userList.get(i).getEmail()+"</td>\n" +
                     "    <td>"+userList.get(i).getAddress()+"</td>\n");

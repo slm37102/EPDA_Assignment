@@ -14,7 +14,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import model.Users;
 import model.UsersFacade;
 
@@ -22,11 +21,12 @@ import model.UsersFacade;
  *
  * @author SLM
  */
-@WebServlet(name = "MinistryPublicUser", urlPatterns = {"/MinistryPublicUser"})
-public class MinistryPublicUser extends HttpServlet {
+@WebServlet(name = "SelectUser", urlPatterns = {"/SelectUser"})
+public class SelectUser extends HttpServlet {
+
     @EJB
     private UsersFacade usersFacade;
-    
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -40,61 +40,45 @@ public class MinistryPublicUser extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         
-        List<Users> userList = usersFacade.findAllPublicUser();
-        String approveCol;
-        
-        HttpSession s = request.getSession(false);
-        s.setAttribute("userList", userList);
+        String i_value = request.getParameter("i");
+        boolean isClinic = request.getParameter("option").equals("clinic");
+        String userId = request.getParameter("userId");
+        String clinicId = request.getParameter("clinicId");
+        String from = request.getParameter("from");
+        String url = from + "?userId=" + userId + "&clinicId=" + clinicId;
+        List<Users> userList = isClinic?usersFacade.findAllClinic():usersFacade.findAllPublicUser();
         
         try (PrintWriter out = response.getWriter()) {
-            out.println("<h1 style=\"font-size:30px;\">Public User Infomation</h1>");
+            //back button
+            out.println("<a href=\""+url+"\">Back</a>");
             
-            request.getRequestDispatcher("ministryBanner.jsp").include(request, response);
-            
-            //print tables header
             out.println("<br><br><table class=\"blueTable\">\n" +
                 "  <tr>\n" +
                 "    <th>Username</th>\n" +
                 "    <th>Name</th>\n" +
-                "    <th>Gender</th>\n" +
-                "    <th>IC Number</th>\n" +
                 "    <th>Phone Number</th>\n" +
                 "    <th>Email</th>\n" +
                 "    <th>Address</th>\n" +
-                "    <th>Approve</th>\n" +
-                "    <th>Edit</th>\n" +
-                "    <th>Delete</th>\n" +
+                "    <th>Select</th>\n" +
                 "  </tr>");
             
             for (int i = 0; i < userList.size(); i++) {
-                if (userList.get(i).isApproved()) {
-                    approveCol = "    <td>Approved</td>\n";
+                String id = userList.get(i).getId().toString();
+                if (isClinic) {
+                    url = from + "?i="+i_value+"&userId=" + userId + "&clinicId=" + id;
                 } else {
-                    approveCol = "    <td><a href=\"ApproveUser?id="+userList.get(i).getId()+"&from=MinistryPublicUser\">Approve</a> |</td>\n";
+                    url = from + "?i="+i_value+"&userId=" + id + "&clinicId=" + clinicId;
                 }
-                //print tables row
                 out.print("  <tr>\n" +
                     "    <td>"+userList.get(i).getUsername()+"</td>\n" +
                     "    <td>"+userList.get(i).getName()+"</td>\n" +
-                    "    <td>"+userList.get(i).getGender()+"</td>\n" +
-                    "    <td>"+userList.get(i).getIc()+"</td>\n" +
                     "    <td>"+userList.get(i).getPhone()+"</td>\n" +
                     "    <td>"+userList.get(i).getEmail()+"</td>\n" +
                     "    <td>"+userList.get(i).getAddress()+"</td>\n" +
-                    approveCol+
-                    "    <td><a href=\"editProfile.jsp?i="+i+"&from=MinistryPublicUser\">Edit</a> |</td>\n" +
-                    "    <td><a href=\"UserDelete?id="+userList.get(i).getId()+"&from=MinistryPublicUser\">Delete</a> |</td>\n" +
-                    "  </tr>");
+                    "    <td><a href=\""+url+"\">Select</a></td></tr>\n");
             }
+            
             out.print("</table><br>");
-            
-            if (request.getParameter("deletedName") != null) {
-                out.print("<br>User "+ request.getParameter("deletedName") +" has been deleted.");
-            }
-            
-            if (request.getParameter("approveName") != null) {
-                out.print("<br>User "+ request.getParameter("approveName") +" has been approved.");
-            }
         }
     }
 

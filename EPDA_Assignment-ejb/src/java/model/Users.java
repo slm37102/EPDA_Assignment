@@ -57,6 +57,7 @@ public class Users implements Serializable {
     private String ic;
     private String email;
     private String address;
+    private boolean approved;
 
     public Users(int userType, String username, String password, String name, String gender, String ic, String phone, String email, String address) {
         this.userType = userType;
@@ -68,6 +69,11 @@ public class Users implements Serializable {
         this.ic = ic;
         this.email = email;
         this.address = address;
+        if (userType == 0) {
+            this.approved = true;
+        } else {
+            this.approved = false;
+        }
     }
 
     public Users(int userType, String username, String password, String name, String phone, String email, String address) {
@@ -78,6 +84,7 @@ public class Users implements Serializable {
         this.phone = phone;
         this.email = email;
         this.address = address;
+        this.approved = false;
     }
     
     public Users() {
@@ -161,6 +168,14 @@ public class Users implements Serializable {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public boolean isApproved() {
+        return approved;
+    }
+
+    public void setApproved(boolean approved) {
+        this.approved = approved;
     }
     
     @Override

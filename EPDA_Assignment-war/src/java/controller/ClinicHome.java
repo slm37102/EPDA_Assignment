@@ -49,12 +49,11 @@ public class ClinicHome extends HttpServlet {
         List<Appointment> appointmentList = appointmentFacade.findAllFromClinic(user.getId());
         
         try (PrintWriter out = response.getWriter()) {
+            out.println("<h1 style=\"font-size:30px;\">Clinic Home Page</h1>");
+            request.getRequestDispatcher("clinicBanner.jsp").include(request, response);
             // if has appointment
             if (appointmentList.size() > 0) {
-                out.println("<h1 style=\"font-size:30px;\">Clinic Home Page</h1>");
                 
-                request.getRequestDispatcher("clinicBanner.jsp").include(request, response);
-
                 out.println("<br><br><table class=\"blueTable\">\n" +
                 "  <tr>\n" +
                 "    <th>Appointment ID</th>\n" +

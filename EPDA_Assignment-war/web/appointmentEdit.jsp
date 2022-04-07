@@ -23,26 +23,41 @@
             HttpSession s = request.getSession(false);                       
             int i = Integer.parseInt(request.getParameter("i"));
             Appointment appointment = ((List<Appointment>)s.getAttribute("appointmentList")).get(i);
+            
+            String clinicId = request.getParameter("clinicId");
+            String userId = request.getParameter("userId");
 
             String stringDate = new SimpleDateFormat("yyyy-MM-dd").format(appointment.getAppointDate());
             String stringTime = new SimpleDateFormat("HH:mm").format(appointment.getAppointDate());
-
-            request.setAttribute("i", i);
-            request.setAttribute("userId", appointment.getUserId());
-            request.setAttribute("clinicId", appointment.getClinicId());
+            if (clinicId == null) {
+                clinicId = "";
+            } 
+            if (userId == null) {
+                userId = ""; 
+            }
+            if (clinicId.equals("") & userId.equals("")) {
+                userId = appointment.getUserId().toString();
+                clinicId = appointment.getClinicId().toString();
+            }
+            
+            request.setAttribute("userId", userId);
+            request.setAttribute("clinicId", clinicId);
             request.setAttribute("date", stringDate);
             request.setAttribute("time", stringTime);
             request.setAttribute("dose", appointment.getNumDose());
+            request.setAttribute("i", i);
         %>
-        <form action="AppointmentEdit?i=${i}" method="POST">
+        <form action="AppointmentEdit?i=${i}&userId=${userId}&clinicId=${clinicId}" method="POST">
             <table>
                 <tr>
                     <td>UserID:</td>
-                    <td><input type="text" name="userId" size="20" value="${userId}" required></td>
+                    <td><input type="text" name="userId" size="20" value="${userId}" required disabled></td>
+                    <td><a href="SelectUser?i=${i}&option=user&userId=${userId}&clinicId=${clinicId}&from=appointmentEdit.jsp">Select User</a></td>                    
                 </tr>
                 <tr>
                     <td>ClinicID:</td>
-                    <td><input type="text" name="clinicId" size="20" value="${clinicId}" required></td>
+                    <td> <input type="text" name="clinicId" size="20" value="${clinicId}" required disabled></td>
+                    <td><a href="SelectUser?i=${i}&option=clinic&userId=${userId}&clinicId=${clinicId}&from=appointmentEdit.jsp">Select Clinic</a></td>
                 </tr>
                 <tr>
                     <td>Appointment Date:</td>
@@ -57,7 +72,9 @@
                     <td><input type="text" name="dose" size="20" value="${dose}" required></td>
                 </tr>
             </table>
-            <p><input type="submit" value="Edit Appointment"></p>
+            <%if (!userId.equals("") & !clinicId.equals("")){%>
+                <p><input type="submit" value="Edit Appointment"></p>
+            <%}%>
         </form>
     </body>
 </html>

@@ -99,16 +99,16 @@
                 </tr>
                 <tr>
                     <td>IC no.:</td>
-                    <td><input type="text" name="ic" size="20" value="${ic}" required></td>
+                    <td><input type="text" name="ic" size="20" pattern="[0-9]{12}" value="${ic}" required></td>
                 </tr>
                 </c:if>
                 <tr>
                     <td>Phone number:</td>
-                    <td><input type="tel" name="phone" size="20" value="${phone}" required></td>
+                    <td><input type="tel" name="phone" size="20" pattern="[0-9]{10,11}" value="${phone}" required></td>
                 </tr>
                 <tr>
                     <td>Email Address:</td>
-                    <td><input type="email" name="email" size="20" value="${email}" required></td>
+                    <td><input type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" name="email" size="20" value="${email}" required></td>
                 </tr>
                 <tr>
                     <td>Address:</td>

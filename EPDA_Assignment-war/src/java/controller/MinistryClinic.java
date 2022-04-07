@@ -41,6 +41,7 @@ public class MinistryClinic extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         
         List<Users> userList = usersFacade.findAllClinic();
+        String approveCol;
         
         HttpSession s = request.getSession(false);
         s.setAttribute("userList", userList);
@@ -53,15 +54,21 @@ public class MinistryClinic extends HttpServlet {
             out.println("<br><br><table class=\"blueTable\">\n" +
                 "  <tr>\n" +
                 "    <th>Username</th>\n" +
-                "    <th>Name</th>\n" +
+                "    <th>Clinic Name</th>\n" +
                 "    <th>Phone Number</th>\n" +
                 "    <th>Email</th>\n" +
                 "    <th>Address</th>\n" +
+                "    <th>Approve</th>\n" +
                 "    <th>Edit</th>\n" +
                 "    <th>Delete</th>\n" +
                 "  </tr>");
             
             for (int i = 0; i < userList.size(); i++) {
+                if (userList.get(i).isApproved()) {
+                    approveCol = "    <td>Approved</td>\n";
+                } else {
+                    approveCol = "    <td><a href=\"ApproveUser?id="+userList.get(i).getId()+"&from=MinistryClinic\">Approve</a> |</td>\n";
+                }
                 //print tables row
                 out.print("  <tr>\n" +
                     "    <td>"+userList.get(i).getUsername()+"</td>\n" +
@@ -69,14 +76,19 @@ public class MinistryClinic extends HttpServlet {
                     "    <td>"+userList.get(i).getPhone()+"</td>\n" +
                     "    <td>"+userList.get(i).getEmail()+"</td>\n" +
                     "    <td>"+userList.get(i).getAddress()+"</td>\n" +
-                    "    <td><a href=\"editProfile.jsp?i="+i+"&from=MinistryClinic\">Edit</a> |</td>\n" +
-                    "    <td><a href=\"UserDelete?id="+userList.get(i).getId()+"&from=MinistryClinic\">Delete</a> |</td>\n" +
+                    approveCol +
+                    "    <td><a href=\"editProfile.jsp?i="+i+"&from=MinistryClinic\">Edit</a></td>\n" +
+                    "    <td><a href=\"UserDelete?id="+userList.get(i).getId()+"&from=MinistryClinic\">Delete</a></td>\n" +
                     "  </tr>");
             }
             out.print("</table><br>");
             
             if (request.getParameter("deletedName") != null) {
                 out.print("<br>User "+ request.getParameter("deletedName") +" has been deleted.");
+            }
+            
+            if (request.getParameter("approveName") != null) {
+                out.print("<br>User "+ request.getParameter("approveName") +" has been approved.");
             }
         }
     }

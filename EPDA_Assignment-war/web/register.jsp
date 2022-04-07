@@ -15,7 +15,7 @@
             var isClinic = document.getElementById("userType2").checked;
             if (isPublicUser === true) {
                 document.getElementById("genderRow").hidden = false;
-                document.getElementById("icRow").hidden = false;
+                document.getElementById("icRow").hidden = false;        
             } else if (isClinic === true) {
                 document.getElementById("genderRow").hidden = true;
                 document.getElementById("icRow").hidden = true;
@@ -100,15 +100,15 @@
                 </tr>
                 <tr id="icRow">
                     <td>IC no.:</td>
-                    <td><input type="text" name="ic" size="20"></td>
+                    <td><input type="text" name="ic" pattern="[0-9]{12}" size="20"></td>
                 </tr>
                 <tr>
                     <td>Phone number:</td>
-                    <td><input type="tel" name="phone" size="20" required></td>
+                    <td><input type="tel" name="phone" size="20" pattern="[0-9]{10,11}" required></td>
                 </tr>
                 <tr>
                     <td>Email Address:</td>
-                    <td><input type="email" name="email" size="20" required></td>
+                    <td><input type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" name="email" size="20" required></td>
                 </tr>
                 <tr>
                     <td>Address:</td>

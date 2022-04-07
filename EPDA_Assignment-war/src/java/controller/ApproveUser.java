@@ -7,13 +7,13 @@ package controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashSet;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import model.Users;
 import model.UsersFacade;
 
@@ -21,12 +21,12 @@ import model.UsersFacade;
  *
  * @author SLM
  */
-@WebServlet(name = "Login", urlPatterns = {"/Login"})
-public class Login extends HttpServlet {
+@WebServlet(name = "ApproveUser", urlPatterns = {"/ApproveUser"})
+public class ApproveUser extends HttpServlet {
 
     @EJB
-    private UsersFacade userFacade;
-    
+    private UsersFacade usersFacade;
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -39,52 +39,14 @@ public class Login extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        Long id = Long.parseLong(request.getParameter("id"));
+        Users user = usersFacade.find(id);
+        String from = request.getParameter("from");
+        user.setApproved(true);
+        usersFacade.edit(user);
         
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        
-        // search for user 
-        Users user = userFacade.findUser(username);
-        
-        //if first time admin login
-        if (username.equals("admin") && user == null && password.equals("admin")) {
-                user = new Users(0, "admin", "admin", "-", "-", "-", "-", "-", "-");
-                userFacade.create(user);
-        }
-        
-        try (PrintWriter out = response.getWriter()) {    
-            if (user != null) {
-                // check user password
-                if (user.getPassword().equals(password)) {
-                    if (user.isApproved()) {
-                        HttpSession s = request.getSession();
-                        s.setAttribute("login", user);
-
-                        switch (user.getUserType()) {
-                            case 0: //if is Ministry staff
-                                request.getRequestDispatcher("MinistryHome").include(request, response);
-                                break;
-                            case 1: //if is Clinic staff
-                                request.getRequestDispatcher("ClinicHome").include(request, response);
-                                break;
-                            case 2: //if is Public User
-                                request.getRequestDispatcher("PublicUserHome").include(request, response);
-                                break;
-                        }
-                    } else {
-                        request.getRequestDispatcher("login.jsp").include(request, response);
-                        out.println("Your account is not approved yet");
-                    }
-                }
-                // all password wrong
-                else {
-                    request.getRequestDispatcher("login.jsp").include(request, response);
-                    out.println("wrong username or password");
-                }
-            } else {
-                request.getRequestDispatcher("login.jsp").include(request, response); 
-                out.println("wrong username or password");
-            }
+        try (PrintWriter out = response.getWriter()) {
+            request.getRequestDispatcher("/"+from+"?approveName="+user.getName()).include(request, response);
         }
     }
 
